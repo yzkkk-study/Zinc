@@ -34,16 +34,17 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .chart-wrap{width:100%;height:100%;min-width:0;min-height:0}
 .chart-grid{scrollbar-width:thin;scrollbar-color:var(--subtle) transparent}
 .chart-cell{background:var(--canvas);box-shadow:inset 0 0 0 1px var(--line)}
-@media (max-width:760px){
-  body{grid-template-rows:48px 44px auto minmax(0,1fr)}
-  .header{padding:0 16px;font-size:16px}
-  .header::before{height:20px;margin-right:10px}
-  .nav,.sub-nav{padding:0 8px}
-  .nav-item{padding:0 14px}
-  .sub-item{padding:0 12px}
-  .main{flex-direction:column}
-  .sidebar{display:flex;flex:0 0 44px;width:100%;min-width:0;padding:0;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none}
-  .side-item{flex:0 0 auto;width:auto;min-height:44px;padding:0 14px;border-left:0;border-bottom:3px solid transparent;white-space:nowrap}
+@media (max-width:720px){
+  body{grid-template-columns:144px minmax(0,1fr);grid-template-rows:48px auto minmax(0,1fr)}
+  .header{grid-row:1;grid-column:1;padding:0 12px;font-size:14px;white-space:nowrap}
+  .header::before{height:18px;margin-right:10px}
+  .nav{grid-row:1;grid-column:2;padding:0}
+  .nav-item{min-width:58px;height:48px;padding:0 12px;font-size:13px;justify-content:center}
+  .sub-nav{grid-row:2;grid-column:1/-1;min-height:40px;padding:4px 8px}
+  .sub-item{min-height:32px;padding:6px 12px}
+  .main{grid-row:3;grid-column:1/-1;flex-direction:column}
+  .sidebar{display:flex;flex:0 0 48px;width:100%;min-width:0;padding:5px 8px;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .side-item{flex:0 0 auto;width:auto;min-height:38px;padding:9px 12px;border-left:0;border-bottom:3px solid transparent;white-space:nowrap}
   .side-item.active{border-left-color:transparent;border-bottom-color:var(--accent)}
   .content{padding:8px}
 }
@@ -198,15 +199,16 @@ function renderChart(cfg) {
   const ch = Math.floor(contentRect.height - parseFloat(contentStyle.paddingTop) - parseFloat(contentStyle.paddingBottom));
   const n = allCharts.length;
   const hasTable = allCharts.some(c => (c.data || []).some(d => d.type === 'table'));
+  const mobileLayout = window.matchMedia('(max-width: 720px)').matches;
 
-  const cols = hasTable && n <= 2 ? (cw >= 760 ? 2 : 1) : (cw >= 1040 ? 3 : (cw >= 640 ? 2 : 1));
+  const cols = mobileLayout ? 1 : (hasTable && n <= 2 ? (cw >= 760 ? 2 : 1) : (cw >= 1040 ? 3 : (cw >= 640 ? 2 : 1)));
   const visibleRows = cols === 1 ? 2 : (hasTable && n <= 2 && cols === 2 ? 1 : 2);
   const gap = cw >= 640 ? 12 : 8;
-  const cellH = Math.floor((ch - gap*(visibleRows-1)) / visibleRows);
+  const cellH = mobileLayout ? Math.max(260, Math.floor((ch - gap*(visibleRows-1)) / visibleRows)) : Math.floor((ch - gap*(visibleRows-1)) / visibleRows);
 
   const grid = document.createElement('div');
   grid.className = 'chart-grid';
-  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:'+gap+'px;width:'+cw+'px;max-height:'+ch+'px;overflow-y:auto;overflow-x:hidden;';
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:'+gap+'px;width:'+cw+'px;max-height:'+ch+'px;padding-right:'+(mobileLayout?4:0)+'px;overflow-y:auto;overflow-x:hidden;';
 
   for (let i = 0; i < n; i++) {
     const cell = document.createElement('div');
@@ -225,7 +227,6 @@ function renderChart(cfg) {
       const lo = JSON.parse(JSON.stringify(c.layout));
       const isTable = (c.data || []).some(d => d.type === 'table');
       const plotW = Math.floor(el.getBoundingClientRect().width);
-      const mobileLayout = window.matchMedia('(max-width: 760px)').matches;
       lo.width = plotW; lo.height = cellH;
       lo.margin = lo.margin || {l:35,r:10,t:35,b:105};
       if (isTable) {
@@ -233,21 +234,16 @@ function renderChart(cfg) {
         lo.showlegend = false;
       } else {
         if (mobileLayout) {
-          const hasRightAxis = lo.yaxis2 && lo.yaxis2.overlaying === 'y';
-          lo.margin = hasRightAxis
-            ? {l:44, r:56, t:32, b:110}
-            : {l:32, r:8, t:32, b:110};
+          lo.margin = {...lo.margin, t:30, b:90};
+          lo.font = {...(lo.font || {}), size:9};
           if (lo.title && typeof lo.title === 'object') {
-            lo.title.font = lo.title.font || {};
-            lo.title.font.size = 12;
+            lo.title.font = {...(lo.title.font || {}), size:12};
           }
           Object.keys(lo).filter(k => /^[xy]axis\d*$/.test(k)).forEach(k => {
-            lo[k].tickfont = lo[k].tickfont || {};
-            lo[k].tickfont.size = 9;
+            lo[k].tickfont = {...(lo[k].tickfont || {}), size:9};
           });
           (lo.annotations || []).forEach(a => {
-            a.font = a.font || {};
-            a.font.size = 9;
+            a.font = {...(a.font || {}), size:8};
           });
         } else {
           lo.margin.b = Math.max(lo.margin.b || 0, 130);
@@ -255,7 +251,7 @@ function renderChart(cfg) {
         }
         const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
         // ponytail: derive the source position from existing Plotly margins.
-        const mobileSourceY = -((Number(lo.margin.b) || 0) - 18) / plotH;
+        const mobileSourceY = (8 - (Number(lo.margin.b) || 0)) / plotH;
         (lo.annotations || []).forEach(a => {
           if (typeof a.text !== 'string' || a.text.indexOf('数据来源') !== 0) return;
           a.y = mobileLayout ? mobileSourceY : -0.34;
@@ -264,7 +260,7 @@ function renderChart(cfg) {
         lo.legend = lo.legend || {};
         lo.legend.font = lo.legend.font || {};
         lo.legend.orientation = 'h';
-        lo.legend.y = -0.28;
+        lo.legend.y = mobileLayout ? (74 - (Number(lo.margin.b) || 0)) / plotH : -0.28;
         lo.legend.yanchor = mobileLayout ? 'top' : 'bottom';
         if (mobileLayout) lo.legend.font.size = 9;
         lo.legend.x = 0.5;
@@ -275,7 +271,7 @@ function renderChart(cfg) {
   }, 80));
 }
 
-const MODULE_DATA_VERSION = "f5a06f1c0c81";
+const MODULE_DATA_VERSION = "a555412f69b2";
 const moduleDataPromises = new Map();
 let moduleRequestId = 0;
 function showModuleStatus(message){
