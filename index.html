@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>锌 · 数据看板</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#161616;--muted:#525252;--subtle:#8d8d8d;--canvas:#fff;--surface:#f4f4f4;--surface-hover:#e8e8e8;--line:#e0e0e0;--accent:#0f62fe}
+html,body{width:100%;height:100%}
+body{display:grid;grid-template-rows:52px 44px auto minmax(0,1fr);font-family:"Microsoft YaHei UI","Microsoft YaHei","Segoe UI",Arial,sans-serif;background:var(--surface);color:var(--ink);overflow:hidden;letter-spacing:0}
+button{font:inherit;letter-spacing:0;border:0;background:none;color:inherit}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.header{grid-row:1;display:flex;align-items:center;padding:0 24px;background:var(--canvas);border-bottom:1px solid var(--line);font-size:18px;font-weight:600;position:relative}
+.header::before{content:'';width:4px;height:24px;margin-right:12px;background:var(--accent)}
+.nav{grid-row:2;display:flex;align-items:stretch;padding:0 24px;background:var(--canvas);border-bottom:1px solid var(--line);overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.nav::-webkit-scrollbar,.sub-nav::-webkit-scrollbar,.sidebar::-webkit-scrollbar{display:none}
+.nav-item{display:flex;align-items:center;flex:0 0 auto;height:44px;padding:0 20px;cursor:pointer;color:var(--muted);font-size:14px;position:relative;transition:background-color .15s,color .15s}
+.nav-item:hover{background:var(--surface);color:var(--ink)}
+.nav-item.active{color:var(--ink);font-weight:600}
+.nav-item.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--accent)}
+.sub-nav{grid-row:3;display:flex;align-items:stretch;min-height:40px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--line);overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+.sub-nav.is-empty{display:none}
+.sub-item{display:flex;align-items:center;flex:0 0 auto;min-height:40px;padding:0 16px;cursor:pointer;color:var(--muted);font-size:13px;border-left:1px solid transparent;border-right:1px solid transparent;transition:background-color .15s,color .15s}
+.sub-item:hover{background:var(--surface-hover);color:var(--ink)}
+.sub-item.active{background:var(--canvas);color:var(--ink);font-weight:600;border-color:var(--line);box-shadow:inset 0 -2px var(--accent)}
+.main{grid-row:4;display:flex;min-width:0;min-height:0;overflow:hidden}
+.sidebar{width:192px;min-width:192px;background:var(--canvas);border-right:1px solid var(--line);overflow-y:auto;padding:8px 0;scrollbar-width:thin;scrollbar-color:var(--subtle) transparent}
+.side-item{display:flex;align-items:center;width:100%;min-height:40px;padding:8px 20px;cursor:pointer;text-align:left;font-size:13px;line-height:1.4;color:var(--muted);border-left:3px solid transparent;transition:background-color .15s,color .15s}
+.side-item:hover{background:var(--surface);color:var(--ink)}
+.side-item.active{background:var(--surface);color:var(--ink);border-left-color:var(--accent);font-weight:600}
+.content{flex:1;min-width:0;min-height:0;overflow:hidden;padding:16px;background:var(--surface)}
+.chart-wrap{width:100%;height:100%;min-width:0;min-height:0}
+.chart-grid{scrollbar-width:thin;scrollbar-color:var(--subtle) transparent}
+.chart-cell{background:var(--canvas);box-shadow:inset 0 0 0 1px var(--line)}
+@media (max-width:760px){
+  body{grid-template-rows:48px 44px auto minmax(0,1fr)}
+  .header{padding:0 16px;font-size:16px}
+  .header::before{height:20px;margin-right:10px}
+  .nav,.sub-nav{padding:0 8px}
+  .nav-item{padding:0 14px}
+  .sub-item{padding:0 12px}
+  .main{flex-direction:column}
+  .sidebar{display:flex;flex:0 0 44px;width:100%;min-width:0;padding:0;overflow-x:auto;overflow-y:hidden;border-right:0;border-bottom:1px solid var(--line);scrollbar-width:none}
+  .side-item{flex:0 0 auto;width:auto;min-height:44px;padding:0 14px;border-left:0;border-bottom:3px solid transparent;white-space:nowrap}
+  .side-item.active{border-left-color:transparent;border-bottom-color:var(--accent)}
+  .content{padding:8px}
+}
+</style>
+</head>
+<body>
+<div class="header">锌 · 数据看板</div>
+<div class="nav" id="navBar"></div>
+<div class="sub-nav" id="subNav"></div>
+<div class="main">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="content" id="contentWrap">
+    <div class="chart-wrap" id="chartWrap"></div>
+  </div>
+</div>
+<script>
+const chartData = {};
+const MODULES = [{"id": "supply", "name": "供应", "subs": [{"name": "锌矿", "groups": [{"id": "S-01", "name": "国内锌精矿产量", "type": "single"}, {"id": "S-01c", "name": "秘鲁锌矿产量", "type": "side2"}, {"id": "S-01b", "name": "全球锌矿产量", "type": "grid4x3"}, {"id": "S-02", "name": "TC", "type": "side2"}, {"id": "S-03", "name": "锌矿出港", "type": "grid2x2"}, {"id": "S-07", "name": "锌精矿港口库存", "type": "single"}]}, {"name": "锌锭", "groups": [{"id": "S-08", "name": "国内精炼锌产量", "type": "side2"}, {"id": "S-08b", "name": "全球精炼锌产量", "type": "grid4x3"}]}, {"name": "冶炼", "groups": [{"id": "S-09", "name": "冶炼利润与成本", "type": "single"}, {"id": "S-10", "name": "锌精矿原料库存", "type": "side2"}, {"id": "S-14", "name": "副产品价格", "type": "side2"}]}]}, {"id": "demand", "name": "下游", "subs": [{"name": "镀锌", "groups": [{"id": "D-01", "name": "开工&产能", "type": "side2"}, {"id": "D-02", "name": "成交", "type": "side2"}, {"id": "D-03", "name": "出口", "type": "grid2x2"}, {"id": "D-04", "name": "库存", "type": "grid2x2"}]}, {"name": "压铸", "groups": [{"id": "D-05", "name": "开工与库存", "type": "side2"}]}, {"name": "氧化锌", "groups": [{"id": "D-07", "name": "开工与库存", "type": "side2"}]}, {"name": "下游综合", "groups": [{"id": "D-09", "name": "国内下游消费指数", "type": "single"}, {"id": "D-09b", "name": "全球精炼锌消费", "type": "grid4x3"}, {"id": "D-10", "name": "国内下游库存合计", "type": "side2"}, {"id": "D-10b", "name": "全球产业链库存", "type": "side2"}, {"id": "D-11", "name": "下游周度汇总", "type": "grid4x3"}]}]}, {"id": "inventory", "name": "库存", "subs": [{"name": "国内", "groups": [{"id": "I-01", "name": "锌锭社会库存", "type": "grid2x2"}, {"id": "I-02", "name": "冶炼厂成品库存", "type": "grid2x2"}, {"id": "I-02b", "name": "国内库存可用天数", "type": "single"}, {"id": "B-01", "name": "国内表需", "type": "side2"}]}, {"name": "LME", "groups": [{"id": "I-03", "name": "LME分地区库存", "type": "grid2x2"}, {"id": "I-04", "name": "LME仓单", "type": "grid2x2"}, {"id": "I-05", "name": "LME非注册+合计", "type": "side2"}]}, {"name": "锌全球库存合计", "groups": [{"id": "I-06", "name": "锌全球库存合计", "type": "side2"}]}]}, {"id": "spread", "name": "价差", "no_sub": true, "groups": [{"id": "P-01", "name": "现货基差", "type": "single"}, {"id": "P-02", "name": "LME 0-3 升贴水", "type": "single"}, {"id": "P-03", "name": "进口盈亏 & Premium", "type": "side2"}, {"id": "P-04", "name": "海外Premium", "type": "side2"}]}, {"id": "position", "name": "持仓", "no_sub": true, "groups": [{"id": "H-01", "name": "沪锌持仓", "type": "side2"}, {"id": "H-02", "name": "LME持仓", "type": "side2"}]}, {"id": "trade", "name": "进出口", "subs": [{"name": "中国", "groups": [{"id": "T-01", "name": "锌精矿进口", "type": "grid4x3"}, {"id": "T-02", "name": "锌精矿进口YTD", "type": "grid4x3"}, {"id": "T-03", "name": "精炼锌进出口", "type": "side2"}, {"id": "T-05", "name": "镀锌板出口", "type": "grid4x3"}]}, {"name": "韩国", "groups": [{"id": "T-05b", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-06", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "日本", "groups": [{"id": "T-13", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-14", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "新加坡", "groups": [{"id": "T-07", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "印度", "groups": [{"id": "T-08", "name": "锌锭进出口", "type": "grid4x3"}, {"id": "T-08b", "name": "锌精矿进出口", "type": "grid4x3"}]}, {"name": "美国", "groups": [{"id": "T-12", "name": "镀锌板进口", "type": "grid4x3"}]}, {"name": "欧盟", "groups": [{"id": "T-09", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-10", "name": "锌锭进出口", "type": "grid4x3"}, {"id": "T-11", "name": "镀锌进出口", "type": "grid4x3"}]}]}];
+const STATE_KEY = 'zincDashboardState';
+let currentModule = 0;
+let currentSub = 0;
+let currentGroupIdx = 0;
+
+function readState() {
+  try {
+    const state = JSON.parse(localStorage.getItem(STATE_KEY) || '{}');
+    return {
+      module: Number.isInteger(state.module) ? state.module : 0,
+      sub: Number.isInteger(state.sub) ? state.sub : 0,
+      group: Number.isInteger(state.group) ? state.group : 0,
+    };
+  } catch (e) {
+    return {module: 0, sub: 0, group: 0};
+  }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STATE_KEY, JSON.stringify({
+      module: currentModule,
+      sub: currentSub,
+      group: currentGroupIdx,
+    }));
+  } catch (e) {}
+}
+
+function clampIndex(value, length) {
+  if (!length) return 0;
+  return Math.max(0, Math.min(value, length - 1));
+}
+
+function getGroups(mi, si) {
+  const m = MODULES[mi];
+  if (!m) return [];
+  return m.no_sub ? (m.groups || []) : ((m.subs && m.subs[si]) ? m.subs[si].groups : []);
+}
+
+function buildNav() {
+  const navBar = document.getElementById('navBar');
+  const saved = readState();
+  const initialModule = clampIndex(saved.module, MODULES.length);
+  MODULES.forEach((m,i) => {
+    const div = document.createElement('button');
+    div.type = 'button';
+    div.className = 'nav-item' + (i===initialModule?' active':'');
+    div.textContent = m.name;
+    div.addEventListener('click', () => selectModule(i));
+    navBar.appendChild(div);
+  });
+  selectModule(initialModule, saved.sub, saved.group);
+}
+
+function selectModule(i, subIdx = 0, groupIdx = 0) {
+  currentModule = clampIndex(i, MODULES.length);
+  const m = MODULES[currentModule];
+  const nextSub = m.no_sub ? 0 : clampIndex(subIdx, m.subs ? m.subs.length : 0);
+  document.querySelectorAll('.nav-item').forEach((el,j) => {
+    const active = j === currentModule;
+    el.classList.toggle('active', active);
+    el.setAttribute('aria-pressed', String(active));
+  });
+  const subNav = document.getElementById('subNav'); subNav.innerHTML = '';
+  subNav.classList.toggle('is-empty', m.no_sub || !m.subs || m.subs.length === 0);
+  if (!m.no_sub && m.subs) {
+    m.subs.forEach((s,j) => {
+      const span = document.createElement('button');
+      span.type = 'button';
+      span.className = 'sub-item' + (j===nextSub?' active':'');
+      span.textContent = s.name;
+      span.addEventListener('click', () => selectSub(currentModule, j));
+      subNav.appendChild(span);
+    });
+  }
+  selectSub(currentModule, nextSub, groupIdx);
+}
+
+function selectSub(mi, j, groupIdx = 0) {
+  currentModule = clampIndex(mi, MODULES.length);
+  const m = MODULES[mi];
+  currentSub = m.no_sub ? 0 : clampIndex(j, m.subs ? m.subs.length : 0);
+  document.querySelectorAll('.sub-item').forEach((el,k) => {
+    const active = k === currentSub;
+    el.classList.toggle('active', active);
+    el.setAttribute('aria-pressed', String(active));
+  });
+  const sidebar = document.getElementById('sidebar'); sidebar.innerHTML = '';
+  const groups = getGroups(mi, currentSub);
+  const nextGroup = clampIndex(groupIdx, groups.length);
+  groups.forEach((g,k) => {
+    const div = document.createElement('button');
+    div.type = 'button';
+    div.className = 'side-item' + (k===nextGroup?' active':'');
+    div.textContent = g.name;
+    div.addEventListener('click', () => selectGroup(mi, currentSub, k));
+    sidebar.appendChild(div);
+  });
+  selectGroup(mi, currentSub, nextGroup);
+}
+
+function selectGroup(mi, si, k) {
+  currentModule = clampIndex(mi, MODULES.length);
+  currentSub = MODULES[currentModule].no_sub ? 0 : si;
+  const groups = getGroups(currentModule, currentSub);
+  currentGroupIdx = clampIndex(k, groups.length);
+  document.querySelectorAll('.side-item').forEach((el,idx) => {
+    const active = idx === currentGroupIdx;
+    el.classList.toggle('active', active);
+    el.setAttribute('aria-pressed', String(active));
+  });
+  if (!groups[currentGroupIdx]) return;
+  saveState();
+  renderChart(chartData[groups[currentGroupIdx].id]);
+}
+
+function renderChart(cfg) {
+  const wrap = document.getElementById('chartWrap');
+  wrap.innerHTML = '';
+  if (!cfg) return;
+
+  let allCharts = [];
+  if (cfg.charts) {
+    allCharts = cfg.charts.filter(c => c && c.data && c.data.length > 0);
+  } else if (cfg.data) {
+    allCharts = [cfg];
+  }
+  if (allCharts.length === 0) return;
+
+  const contentWrap = document.getElementById('contentWrap');
+  const contentRect = contentWrap.getBoundingClientRect();
+  const contentStyle = getComputedStyle(contentWrap);
+  const cw = Math.floor(contentRect.width - parseFloat(contentStyle.paddingLeft) - parseFloat(contentStyle.paddingRight));
+  const ch = Math.floor(contentRect.height - parseFloat(contentStyle.paddingTop) - parseFloat(contentStyle.paddingBottom));
+  const n = allCharts.length;
+  const hasTable = allCharts.some(c => (c.data || []).some(d => d.type === 'table'));
+
+  const cols = hasTable && n <= 2 ? (cw >= 760 ? 2 : 1) : (cw >= 1040 ? 3 : (cw >= 640 ? 2 : 1));
+  const visibleRows = cols === 1 ? 2 : (hasTable && n <= 2 && cols === 2 ? 1 : 2);
+  const gap = cw >= 640 ? 12 : 8;
+  const cellH = Math.floor((ch - gap*(visibleRows-1)) / visibleRows);
+
+  const grid = document.createElement('div');
+  grid.className = 'chart-grid';
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:'+gap+'px;width:'+cw+'px;max-height:'+ch+'px;overflow-y:auto;overflow-x:hidden;';
+
+  for (let i = 0; i < n; i++) {
+    const cell = document.createElement('div');
+    cell.id = 'gc_'+i;
+    cell.className = 'chart-cell';
+    cell.style.height = cellH+'px';
+    grid.appendChild(cell);
+  }
+  wrap.appendChild(grid);
+
+  requestAnimationFrame(() => setTimeout(() => {
+    for (let i = 0; i < allCharts.length; i++) {
+      const c = allCharts[i];
+      const el = document.getElementById('gc_'+i);
+      if (!el) continue;
+      const lo = JSON.parse(JSON.stringify(c.layout));
+      const isTable = (c.data || []).some(d => d.type === 'table');
+      const plotW = Math.floor(el.getBoundingClientRect().width);
+      const mobileLayout = window.matchMedia('(max-width: 760px)').matches;
+      lo.width = plotW; lo.height = cellH;
+      lo.margin = lo.margin || {l:35,r:10,t:35,b:105};
+      if (isTable) {
+        lo.margin = {l:0, r:0, t:0, b:0};
+        lo.showlegend = false;
+      } else {
+        lo.margin.b = Math.max(lo.margin.b || 0, 130);
+        if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
+        const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
+        // ponytail: derive the source position from existing Plotly margins.
+        const mobileSourceY = -((Number(lo.margin.b) || 0) - 18) / plotH;
+        (lo.annotations || []).forEach(a => {
+          if (typeof a.text !== 'string' || a.text.indexOf('数据来源') !== 0) return;
+          a.y = mobileLayout ? mobileSourceY : -0.34;
+          if (mobileLayout) a.yanchor = 'bottom';
+        });
+        lo.legend = lo.legend || {};
+        lo.legend.font = lo.legend.font || {};
+        lo.legend.orientation = 'h';
+        lo.legend.y = -0.28;
+        lo.legend.yanchor = mobileLayout ? 'top' : 'bottom';
+        if (mobileLayout) lo.legend.font.size = 10;
+        lo.legend.x = 0.5;
+        lo.legend.xanchor = 'center';
+      }
+      Plotly.newPlot(el, c.data, lo, {displayModeBar:false, responsive:true});
+    }
+  }, 80));
+}
+
+const MODULE_DATA_VERSION = "9a69beccdc4d";
+const moduleDataPromises = new Map();
+let moduleRequestId = 0;
+function showModuleStatus(message){
+  const wrap=document.getElementById("chartWrap");
+  wrap.innerHTML="";
+  const status=document.createElement("div");
+  status.className="empty";
+  status.textContent=message;
+  wrap.appendChild(status);
+}
+async function loadModuleData(moduleIndex){
+  const module=MODULES[moduleIndex];
+  if(!module){throw new Error("Unknown module index: "+moduleIndex);}
+  if(moduleDataPromises.has(module.id)){return moduleDataPromises.get(module.id);}
+  const expectedIds=(module.no_sub?module.groups:module.subs.flatMap(sub=>sub.groups)).map(group=>group.id);
+  const request=fetch("data/"+module.id+".json?v="+MODULE_DATA_VERSION)
+    .then(response=>{if(!response.ok){throw new Error("HTTP "+response.status+" loading "+module.id);}return response.json();})
+    .then(payload=>{
+      const keys=Object.keys(payload);
+      if(keys.length!==expectedIds.length||keys.some(key=>!expectedIds.includes(key))){throw new Error("Module data mismatch: "+module.id);}
+      Object.assign(chartData,payload);
+      return payload;
+    })
+    .catch(error=>{moduleDataPromises.delete(module.id);throw error;});
+  moduleDataPromises.set(module.id,request);
+  return request;
+}
+const selectLoadedModule=selectModule;
+selectModule=async function(i,subIndex=0,groupIndex=0){
+  const requestId=++moduleRequestId;
+  document.querySelectorAll(".nav-item").forEach((element,index)=>{element.classList.toggle("active",index===i);element.setAttribute("aria-current",index===i?"page":"false");});
+  document.getElementById("subNav").innerHTML="";
+  document.getElementById("sidebar").innerHTML="";
+  showModuleStatus("正在加载数据...");
+  try{
+    await loadModuleData(i);
+    if(requestId!==moduleRequestId){return;}
+    selectLoadedModule(i,subIndex,groupIndex);
+  }catch(error){
+    if(requestId!==moduleRequestId){return;}
+    console.error(error);
+    showModuleStatus("数据加载失败，请刷新后重试");
+  }
+};
+buildNav();
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const groups = getGroups(currentModule, currentSub);
+    const group = groups[currentGroupIdx];
+    if (group) renderChart(chartData[group.id]);
+  }, 120);
+});
+</script>
+</body>
+</html>
+
