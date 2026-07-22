@@ -232,8 +232,27 @@ function renderChart(cfg) {
         lo.margin = {l:0, r:0, t:0, b:0};
         lo.showlegend = false;
       } else {
-        lo.margin.b = Math.max(lo.margin.b || 0, 130);
-        if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
+        if (mobileLayout) {
+          const hasRightAxis = lo.yaxis2 && lo.yaxis2.overlaying === 'y';
+          lo.margin = hasRightAxis
+            ? {l:44, r:56, t:32, b:110}
+            : {l:32, r:8, t:32, b:110};
+          if (lo.title && typeof lo.title === 'object') {
+            lo.title.font = lo.title.font || {};
+            lo.title.font.size = 12;
+          }
+          Object.keys(lo).filter(k => /^[xy]axis\d*$/.test(k)).forEach(k => {
+            lo[k].tickfont = lo[k].tickfont || {};
+            lo[k].tickfont.size = 9;
+          });
+          (lo.annotations || []).forEach(a => {
+            a.font = a.font || {};
+            a.font.size = 9;
+          });
+        } else {
+          lo.margin.b = Math.max(lo.margin.b || 0, 130);
+          if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
+        }
         const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
         // ponytail: derive the source position from existing Plotly margins.
         const mobileSourceY = -((Number(lo.margin.b) || 0) - 18) / plotH;
@@ -247,7 +266,7 @@ function renderChart(cfg) {
         lo.legend.orientation = 'h';
         lo.legend.y = -0.28;
         lo.legend.yanchor = mobileLayout ? 'top' : 'bottom';
-        if (mobileLayout) lo.legend.font.size = 10;
+        if (mobileLayout) lo.legend.font.size = 9;
         lo.legend.x = 0.5;
         lo.legend.xanchor = 'center';
       }
@@ -256,7 +275,7 @@ function renderChart(cfg) {
   }, 80));
 }
 
-const MODULE_DATA_VERSION = "07696490cbbc";
+const MODULE_DATA_VERSION = "f5a06f1c0c81";
 const moduleDataPromises = new Map();
 let moduleRequestId = 0;
 function showModuleStatus(message){
