@@ -250,7 +250,7 @@ function renderChart(cfg) {
           if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
         }
         const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
-        // ponytail: derive the source position from existing Plotly margins.
+        // Derive the source position from existing Plotly margins.
         const mobileSourceY = (8 - (Number(lo.margin.b) || 0)) / plotH;
         (lo.annotations || []).forEach(a => {
           if (typeof a.text !== 'string' || a.text.indexOf('数据来源') !== 0) return;
