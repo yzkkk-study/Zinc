@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>锌 · 数据看板</title>
-<script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plotly.js-basic-dist-min@2.35.2/plotly-basic.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--ink:#161616;--muted:#525252;--subtle:#8d8d8d;--canvas:#fff;--surface:#f4f4f4;--surface-hover:#e8e8e8;--line:#e0e0e0;--accent:#0f62fe}
@@ -34,6 +34,26 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .chart-wrap{width:100%;height:100%;min-width:0;min-height:0}
 .chart-grid{scrollbar-width:thin;scrollbar-color:var(--subtle) transparent}
 .chart-cell{background:var(--canvas);box-shadow:inset 0 0 0 1px var(--line)}
+.data-table-shell{display:flex;flex-direction:column;width:100%;height:100%;min-width:0;min-height:0;background:var(--canvas);border:1px solid var(--line)}
+.data-table-meta{display:flex;align-items:center;flex:0 0 42px;min-width:0;padding:0 14px;border-bottom:1px solid var(--line);background:var(--surface)}
+.data-table-year{font-size:13px;font-weight:600;color:var(--ink)}
+.data-table-source{margin-left:auto;font-size:10px;color:var(--muted);white-space:nowrap}
+.data-table-scroll{flex:1;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--subtle) var(--surface)}
+.data-table-scroll.is-draggable{cursor:grab}
+.data-table-scroll.is-dragging{cursor:grabbing;user-select:none}
+.data-table-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.monthly-balance-table{width:max(100%,1516px);border-collapse:separate;border-spacing:0;table-layout:fixed;background:var(--canvas)}
+.monthly-balance-table col.metric-col{width:220px}
+.monthly-balance-table col.month-col{width:108px}
+.monthly-balance-table thead th{position:sticky;top:0;z-index:3;height:44px;padding:0 12px;background:#262626;color:#f4f4f4;border-right:1px solid #525252;border-bottom:1px solid #525252;font-size:11px;font-weight:600;text-align:center;white-space:nowrap}
+.monthly-balance-table thead th:first-child{left:0;z-index:5;text-align:left}
+.monthly-balance-table tbody th,.monthly-balance-table tbody td{height:46px;padding:8px 12px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-size:11px;line-height:1.35}
+.monthly-balance-table tbody th{position:sticky;left:0;z-index:2;background:var(--canvas);text-align:left;font-weight:400}
+.monthly-balance-table tbody td{text-align:center;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.monthly-balance-table tbody tr:hover th,.monthly-balance-table tbody tr:hover td{background:var(--surface)}
+.metric-main{display:block;color:var(--ink);font-size:12px;font-weight:600}
+.metric-unit{display:block;margin-top:2px;color:var(--muted);font-size:9px;font-weight:400}
+.balance-empty{color:var(--subtle)}
 @media (max-width:720px){
   body{grid-template-columns:144px minmax(0,1fr);grid-template-rows:48px auto minmax(0,1fr)}
   .header{grid-row:1;grid-column:1;padding:0 12px;font-size:14px;white-space:nowrap}
@@ -47,6 +67,11 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .side-item{flex:0 0 auto;width:auto;min-height:38px;padding:9px 12px;border-left:0;border-bottom:3px solid transparent;white-space:nowrap}
   .side-item.active{border-left-color:transparent;border-bottom-color:var(--accent)}
   .content{padding:8px}
+  .data-table-meta{flex-basis:40px;padding:0 10px}
+  .monthly-balance-table{width:1400px}
+  .monthly-balance-table col.metric-col{width:184px}
+  .monthly-balance-table col.month-col{width:100px}
+  .monthly-balance-table thead th,.monthly-balance-table tbody th,.monthly-balance-table tbody td{padding-left:9px;padding-right:9px}
 }
 </style>
 </head>
@@ -62,7 +87,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 </div>
 <script>
 const chartData = {};
-const MODULES = [{"id": "supply", "name": "供应", "subs": [{"name": "锌矿", "groups": [{"id": "S-01", "name": "国内锌精矿产量", "type": "single"}, {"id": "S-01c", "name": "秘鲁锌矿产量", "type": "side2"}, {"id": "S-01b", "name": "全球锌矿产量", "type": "grid4x3"}, {"id": "S-02", "name": "TC", "type": "side2"}, {"id": "S-03", "name": "锌矿出港", "type": "grid2x2"}, {"id": "S-07", "name": "锌精矿港口库存", "type": "single"}]}, {"name": "锌锭", "groups": [{"id": "S-08", "name": "国内精炼锌产量", "type": "side2"}, {"id": "S-08b", "name": "全球精炼锌产量", "type": "grid4x3"}]}, {"name": "冶炼", "groups": [{"id": "S-09", "name": "冶炼利润与成本", "type": "single"}, {"id": "S-10", "name": "锌精矿原料库存", "type": "side2"}, {"id": "S-14", "name": "副产品价格", "type": "side2"}]}]}, {"id": "demand", "name": "下游", "subs": [{"name": "镀锌", "groups": [{"id": "D-01", "name": "开工&产能", "type": "side2"}, {"id": "D-02", "name": "成交", "type": "side2"}, {"id": "D-03", "name": "出口", "type": "grid2x2"}, {"id": "D-04", "name": "库存", "type": "grid2x2"}]}, {"name": "压铸", "groups": [{"id": "D-05", "name": "开工与库存", "type": "side2"}]}, {"name": "氧化锌", "groups": [{"id": "D-07", "name": "开工与库存", "type": "side2"}]}, {"name": "下游综合", "groups": [{"id": "D-09", "name": "国内下游消费指数", "type": "single"}, {"id": "D-09b", "name": "全球精炼锌消费", "type": "grid4x3"}, {"id": "D-10", "name": "国内下游库存合计", "type": "side2"}, {"id": "D-10b", "name": "全球产业链库存", "type": "side2"}, {"id": "D-11", "name": "下游周度汇总", "type": "grid4x3"}]}]}, {"id": "inventory", "name": "库存", "subs": [{"name": "国内", "groups": [{"id": "I-01", "name": "锌锭社会库存", "type": "grid2x2"}, {"id": "I-02", "name": "冶炼厂成品库存", "type": "grid2x2"}, {"id": "I-02b", "name": "国内库存可用天数", "type": "single"}, {"id": "B-01", "name": "国内表需", "type": "side2"}]}, {"name": "LME", "groups": [{"id": "I-03", "name": "LME分地区库存", "type": "grid2x2"}, {"id": "I-04", "name": "LME仓单", "type": "grid2x2"}, {"id": "I-05", "name": "LME非注册+合计", "type": "side2"}]}, {"name": "锌全球库存合计", "groups": [{"id": "I-06", "name": "锌全球库存合计", "type": "side2"}]}]}, {"id": "spread", "name": "价差", "no_sub": true, "groups": [{"id": "P-01", "name": "现货基差", "type": "grid2x2"}, {"id": "P-02", "name": "LME 0-3 升贴水", "type": "single"}, {"id": "P-03", "name": "进口盈亏 & Premium", "type": "side2"}, {"id": "P-04", "name": "海外Premium", "type": "side2"}]}, {"id": "position", "name": "持仓", "no_sub": true, "groups": [{"id": "H-01", "name": "沪锌持仓", "type": "side2"}, {"id": "H-02", "name": "LME持仓", "type": "side2"}]}, {"id": "trade", "name": "进出口", "subs": [{"name": "中国", "groups": [{"id": "T-01", "name": "锌精矿进口", "type": "grid4x3"}, {"id": "T-02", "name": "锌精矿进口YTD", "type": "grid4x3"}, {"id": "T-03", "name": "精炼锌进出口", "type": "side2"}, {"id": "T-05", "name": "镀锌板出口", "type": "grid4x3"}]}, {"name": "韩国", "groups": [{"id": "T-05b", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-06", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "日本", "groups": [{"id": "T-13", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-14", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "新加坡", "groups": [{"id": "T-07", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "印度", "groups": [{"id": "T-08", "name": "锌锭进出口", "type": "grid4x3"}, {"id": "T-08b", "name": "锌精矿进出口", "type": "grid4x3"}]}, {"name": "美国", "groups": [{"id": "T-12", "name": "镀锌板进口", "type": "grid4x3"}]}, {"name": "欧盟", "groups": [{"id": "T-09", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-10", "name": "锌锭进出口", "type": "grid4x3"}, {"id": "T-11", "name": "镀锌进出口", "type": "grid4x3"}]}]}];
+const MODULES = [{"id": "supply", "name": "供应", "subs": [{"name": "锌矿", "groups": [{"id": "S-01", "name": "国内锌精矿产量", "type": "single"}, {"id": "S-01c", "name": "秘鲁锌矿产量", "type": "side2"}, {"id": "S-01b", "name": "全球锌矿产量", "type": "grid4x3"}, {"id": "S-02", "name": "TC", "type": "side2"}, {"id": "S-03", "name": "锌矿出港", "type": "grid2x2"}, {"id": "S-07", "name": "锌精矿港口库存", "type": "single"}]}, {"name": "锌锭", "groups": [{"id": "S-08", "name": "国内精炼锌产量", "type": "side2"}, {"id": "S-08b", "name": "全球精炼锌产量", "type": "grid4x3"}]}, {"name": "冶炼", "groups": [{"id": "S-09", "name": "冶炼利润与成本", "type": "single"}, {"id": "S-10", "name": "锌精矿原料库存", "type": "side2"}, {"id": "S-14", "name": "副产品价格", "type": "side2"}]}]}, {"id": "demand", "name": "下游", "subs": [{"name": "镀锌", "groups": [{"id": "D-01", "name": "开工&产能", "type": "side2"}, {"id": "D-02", "name": "成交", "type": "side2"}, {"id": "D-03", "name": "出口", "type": "grid2x2"}, {"id": "D-04", "name": "库存", "type": "grid2x2"}]}, {"name": "压铸", "groups": [{"id": "D-05", "name": "开工与库存", "type": "side2"}]}, {"name": "氧化锌", "groups": [{"id": "D-07", "name": "开工与库存", "type": "side2"}]}, {"name": "下游综合", "groups": [{"id": "D-09", "name": "国内下游消费指数", "type": "single"}, {"id": "D-09b", "name": "全球精炼锌消费", "type": "grid4x3"}, {"id": "D-10", "name": "国内下游库存合计", "type": "side2"}, {"id": "D-10b", "name": "全球产业链库存", "type": "side2"}, {"id": "D-11", "name": "下游周度汇总", "type": "grid4x3"}]}]}, {"id": "inventory", "name": "库存", "subs": [{"name": "国内", "groups": [{"id": "I-01", "name": "锌锭社会库存", "type": "grid2x2"}, {"id": "I-02", "name": "冶炼厂成品库存", "type": "grid2x2"}, {"id": "I-02b", "name": "国内库存可用天数", "type": "single"}, {"id": "B-01", "name": "国内表需", "type": "single"}, {"id": "B-02", "name": "国内月度平衡表", "type": "data_table"}]}, {"name": "LME", "groups": [{"id": "I-03", "name": "LME分地区库存", "type": "grid2x2"}, {"id": "I-04", "name": "LME仓单", "type": "grid2x2"}, {"id": "I-05", "name": "LME非注册+合计", "type": "side2"}]}, {"name": "锌全球库存合计", "groups": [{"id": "I-06", "name": "锌全球库存合计", "type": "side2"}]}]}, {"id": "spread", "name": "价差", "no_sub": true, "groups": [{"id": "P-01", "name": "现货基差", "type": "grid2x2"}, {"id": "P-02", "name": "LME 0-3 升贴水", "type": "single"}, {"id": "P-03", "name": "进口盈亏 & Premium", "type": "side2"}, {"id": "P-04", "name": "海外Premium", "type": "side2"}]}, {"id": "position", "name": "持仓", "no_sub": true, "groups": [{"id": "H-01", "name": "沪锌持仓", "type": "side2"}, {"id": "H-02", "name": "LME持仓", "type": "side2"}]}, {"id": "trade", "name": "进出口", "subs": [{"name": "中国", "groups": [{"id": "T-01", "name": "锌精矿进口", "type": "grid4x3"}, {"id": "T-02", "name": "锌精矿进口YTD", "type": "grid4x3"}, {"id": "T-03", "name": "精炼锌进出口", "type": "side2"}, {"id": "T-05", "name": "镀锌板出口", "type": "grid4x3"}]}, {"name": "韩国", "groups": [{"id": "T-05b", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-06", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "日本", "groups": [{"id": "T-13", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-14", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "新加坡", "groups": [{"id": "T-07", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "印度", "groups": [{"id": "T-08b", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-08", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "美国", "groups": [{"id": "T-12", "name": "镀锌板进口", "type": "grid4x3"}]}, {"name": "欧盟", "groups": [{"id": "T-09", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-10", "name": "锌锭进出口", "type": "grid4x3"}, {"id": "T-11", "name": "镀锌进出口", "type": "grid4x3"}]}]}];
 const STATE_KEY = 'zincDashboardState';
 let currentModule = 0;
 let currentSub = 0;
@@ -179,10 +204,126 @@ function selectGroup(mi, si, k) {
   renderChart(chartData[groups[currentGroupIdx].id]);
 }
 
+function enablePointerDrag(scroller) {
+  let drag = null;
+
+  scroller.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'mouse' || event.button !== 0 || scroller.scrollWidth <= scroller.clientWidth) return;
+    drag = {id:event.pointerId, x:event.clientX, left:scroller.scrollLeft, moved:false};
+    scroller.setPointerCapture(event.pointerId);
+  });
+
+  scroller.addEventListener('pointermove', event => {
+    if (!drag || drag.id !== event.pointerId) return;
+    const dx = event.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) < 4) return;
+    drag.moved = true;
+    scroller.classList.add('is-dragging');
+    scroller.scrollLeft = drag.left - dx;
+    event.preventDefault();
+  });
+
+  const endDrag = event => {
+    if (!drag || drag.id !== event.pointerId) return;
+    if (scroller.hasPointerCapture(event.pointerId)) scroller.releasePointerCapture(event.pointerId);
+    drag = null;
+    scroller.classList.remove('is-dragging');
+  };
+  scroller.addEventListener('pointerup', endDrag);
+  scroller.addEventListener('pointercancel', endDrag);
+}
+
+function renderDataTable(wrap, cfg) {
+  if (!cfg.rows || cfg.rows.length === 0) return;
+
+  const shell = document.createElement('section');
+  shell.className = 'data-table-shell';
+  shell.setAttribute('aria-label', '国内月度平衡表');
+
+  const meta = document.createElement('div');
+  meta.className = 'data-table-meta';
+  const year = document.createElement('span');
+  year.className = 'data-table-year';
+  year.textContent = String(cfg.year) + '年';
+  meta.appendChild(year);
+  if (cfg.source) {
+    const source = document.createElement('span');
+    source.className = 'data-table-source';
+    source.textContent = '数据来源: ' + cfg.source;
+    meta.appendChild(source);
+  }
+  shell.appendChild(meta);
+
+  const scroller = document.createElement('div');
+  scroller.className = 'data-table-scroll is-draggable';
+  scroller.tabIndex = 0;
+  scroller.setAttribute('role', 'region');
+  scroller.setAttribute('aria-label', String(cfg.year) + '年国内月度平衡表');
+
+  const table = document.createElement('table');
+  table.className = 'monthly-balance-table';
+  const colgroup = document.createElement('colgroup');
+  (cfg.headers || []).forEach((_, index) => {
+    const col = document.createElement('col');
+    col.className = index === 0 ? 'metric-col' : 'month-col';
+    colgroup.appendChild(col);
+  });
+  table.appendChild(colgroup);
+
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  (cfg.headers || []).forEach(label => {
+    const th = document.createElement('th');
+    th.scope = 'col';
+    th.textContent = label;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  cfg.rows.forEach(row => {
+    const tr = document.createElement('tr');
+    const metric = document.createElement('th');
+    metric.scope = 'row';
+    const label = document.createElement('span');
+    label.className = 'metric-main';
+    label.textContent = row.label;
+    metric.appendChild(label);
+    if (row.unit) {
+      const unit = document.createElement('span');
+      unit.className = 'metric-unit';
+      unit.textContent = row.unit;
+      metric.appendChild(unit);
+    }
+    tr.appendChild(metric);
+    (row.values || []).forEach(value => {
+      const td = document.createElement('td');
+      if (value === null || value === undefined || value === '') {
+        td.className = 'balance-empty';
+        td.textContent = '--';
+      } else {
+        td.textContent = String(value);
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  scroller.appendChild(table);
+  shell.appendChild(scroller);
+  wrap.appendChild(shell);
+  enablePointerDrag(scroller);
+}
+
 function renderChart(cfg) {
   const wrap = document.getElementById('chartWrap');
   wrap.innerHTML = '';
   if (!cfg) return;
+  if (cfg.type === 'data_table') {
+    renderDataTable(wrap, cfg);
+    return;
+  }
 
   let allCharts = [];
   if (cfg.charts) {
@@ -250,18 +391,20 @@ function renderChart(cfg) {
           if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
         }
         const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
+        const legendItemCount = (c.data || []).filter(d => d.showlegend !== false && d.name).length;
+        const wrappedLegend = !mobileLayout && legendItemCount > 6;
         // Derive the source position from existing Plotly margins.
         const mobileSourceY = (8 - (Number(lo.margin.b) || 0)) / plotH;
         (lo.annotations || []).forEach(a => {
           if (typeof a.text !== 'string' || a.text.indexOf('数据来源') !== 0) return;
-          a.y = mobileLayout ? mobileSourceY : -0.34;
-          if (mobileLayout) a.yanchor = 'bottom';
+          a.y = mobileLayout ? mobileSourceY : (wrappedLegend ? -0.46 : -0.34);
+          if (mobileLayout || wrappedLegend) a.yanchor = 'bottom';
         });
         lo.legend = lo.legend || {};
         lo.legend.font = lo.legend.font || {};
         lo.legend.orientation = 'h';
-        lo.legend.y = mobileLayout ? (74 - (Number(lo.margin.b) || 0)) / plotH : -0.28;
-        lo.legend.yanchor = mobileLayout ? 'top' : 'bottom';
+        lo.legend.y = mobileLayout ? (74 - (Number(lo.margin.b) || 0)) / plotH : (wrappedLegend ? -0.1 : -0.28);
+        lo.legend.yanchor = (mobileLayout || wrappedLegend) ? 'top' : 'bottom';
         if (mobileLayout) lo.legend.font.size = 9;
         lo.legend.x = 0.5;
         lo.legend.xanchor = 'center';
@@ -271,7 +414,7 @@ function renderChart(cfg) {
   }, 80));
 }
 
-const MODULE_DATA_VERSION = "da305e640dbb";
+const MODULE_DATA_VERSION = "1cebdf094e22";
 const moduleDataPromises = new Map();
 let moduleRequestId = 0;
 function showModuleStatus(message){
