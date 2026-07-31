@@ -367,6 +367,8 @@ function renderChart(cfg) {
       if (!el) continue;
       const lo = JSON.parse(JSON.stringify(c.layout));
       const isTable = (c.data || []).some(d => d.type === 'table');
+      const legendItemCount = (c.data || []).filter(d => d.showlegend !== false && d.name).length;
+      const crowdedLegend = legendItemCount > 6;
       const plotW = Math.floor(el.getBoundingClientRect().width);
       lo.width = plotW; lo.height = cellH;
       lo.margin = lo.margin || {l:35,r:10,t:35,b:105};
@@ -375,7 +377,7 @@ function renderChart(cfg) {
         lo.showlegend = false;
       } else {
         if (mobileLayout) {
-          lo.margin = {...lo.margin, t:30, b:90};
+          lo.margin = {...lo.margin, t:30, b:crowdedLegend ? 120 : 90};
           lo.font = {...(lo.font || {}), size:9};
           if (lo.title && typeof lo.title === 'object') {
             lo.title.font = {...(lo.title.font || {}), size:12};
@@ -391,8 +393,7 @@ function renderChart(cfg) {
           if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
         }
         const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
-        const legendItemCount = (c.data || []).filter(d => d.showlegend !== false && d.name).length;
-        const wrappedLegend = !mobileLayout && legendItemCount > 6;
+        const wrappedLegend = !mobileLayout && crowdedLegend;
         // Derive the source position from existing Plotly margins.
         const mobileSourceY = (8 - (Number(lo.margin.b) || 0)) / plotH;
         (lo.annotations || []).forEach(a => {
@@ -403,7 +404,8 @@ function renderChart(cfg) {
         lo.legend = lo.legend || {};
         lo.legend.font = lo.legend.font || {};
         lo.legend.orientation = 'h';
-        lo.legend.y = mobileLayout ? (74 - (Number(lo.margin.b) || 0)) / plotH : (wrappedLegend ? -0.1 : -0.28);
+        const mobileLegendOffset = crowdedLegend ? 104 : 74;
+        lo.legend.y = mobileLayout ? (mobileLegendOffset - (Number(lo.margin.b) || 0)) / plotH : (wrappedLegend ? -0.1 : -0.28);
         lo.legend.yanchor = (mobileLayout || wrappedLegend) ? 'top' : 'bottom';
         if (mobileLayout) lo.legend.font.size = 9;
         lo.legend.x = 0.5;
@@ -414,7 +416,7 @@ function renderChart(cfg) {
   }, 80));
 }
 
-const MODULE_DATA_VERSION = "1cebdf094e22";
+const MODULE_DATA_VERSION = "3057070aa4bd";
 const moduleDataPromises = new Map();
 let moduleRequestId = 0;
 function showModuleStatus(message){
