@@ -370,6 +370,7 @@ function renderChart(cfg) {
       const legendItemCount = (c.data || []).filter(d => d.showlegend !== false && d.name).length;
       const crowdedLegend = legendItemCount > 6;
       const plotW = Math.floor(el.getBoundingClientRect().width);
+      const narrowDesktop = !mobileLayout && plotW < 500;
       lo.width = plotW; lo.height = cellH;
       lo.margin = lo.margin || {l:35,r:10,t:35,b:105};
       if (isTable) {
@@ -390,23 +391,28 @@ function renderChart(cfg) {
           });
         } else {
           lo.margin.b = Math.max(lo.margin.b || 0, 130);
-          if (crowdedLegend) lo.margin.b = Math.max(lo.margin.b, 150);
           if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
         }
         const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
         const wrappedLegend = !mobileLayout && crowdedLegend;
+        const compactDesktopLegend = narrowDesktop || wrappedLegend;
         const bottomSourceY = (8 - (Number(lo.margin.b) || 0)) / plotH;
         (lo.annotations || []).forEach(a => {
           if (typeof a.text !== 'string' || a.text.indexOf('数据来源') !== 0) return;
-          a.y = (mobileLayout || wrappedLegend) ? bottomSourceY : -0.34;
-          if (mobileLayout || wrappedLegend) a.yanchor = 'bottom';
+          a.y = (mobileLayout || compactDesktopLegend) ? bottomSourceY : -0.34;
+          if (mobileLayout || compactDesktopLegend) a.yanchor = 'bottom';
         });
         lo.legend = lo.legend || {};
         lo.legend.font = lo.legend.font || {};
+        if (compactDesktopLegend) {
+          lo.legend.font.size = Math.min(Number(lo.legend.font.size) || 11, 9);
+        }
         lo.legend.orientation = 'h';
         const mobileLegendOffset = crowdedLegend ? 104 : 74;
-        lo.legend.y = mobileLayout ? (mobileLegendOffset - (Number(lo.margin.b) || 0)) / plotH : (wrappedLegend ? -0.1 : -0.28);
-        lo.legend.yanchor = (mobileLayout || wrappedLegend) ? 'top' : 'bottom';
+        lo.legend.y = mobileLayout
+          ? (mobileLegendOffset - (Number(lo.margin.b) || 0)) / plotH
+          : (narrowDesktop ? -0.18 : (wrappedLegend ? -0.1 : -0.28));
+        lo.legend.yanchor = (mobileLayout || compactDesktopLegend) ? 'top' : 'bottom';
         if (mobileLayout) lo.legend.font.size = 9;
         lo.legend.x = 0.5;
         lo.legend.xanchor = 'center';
@@ -416,7 +422,7 @@ function renderChart(cfg) {
   }, 80));
 }
 
-const MODULE_DATA_VERSION = "1955af03b0cc";
+const MODULE_DATA_VERSION = "81014664e6b0";
 const moduleDataPromises = new Map();
 let moduleRequestId = 0;
 function showModuleStatus(message){
