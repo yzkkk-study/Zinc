@@ -54,8 +54,63 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .metric-main{display:block;color:var(--ink);font-size:12px;font-weight:600}
 .metric-unit{display:block;margin-top:2px;color:var(--muted);font-size:9px;font-weight:400}
 .balance-empty{color:var(--subtle)}
+.top-actions{grid-row:1;grid-column:1;justify-self:end;align-self:center;z-index:1;display:flex;align-items:center;gap:6px;padding:0 18px;color:var(--ink)}
+.icon-button{display:inline-flex;align-items:center;justify-content:center;flex:0 0 30px;width:30px;height:30px;border-radius:4px;cursor:pointer;color:var(--muted)}
+.icon-button:hover{background:#e9ecef;color:var(--ink)}
+.top-actions .icon-button{color:var(--muted)}
+.top-actions .icon-button:hover{background:var(--surface-hover);color:var(--ink)}
+.icon-button svg{width:16px;height:16px;flex:none}
+.icon-button.is-saved{color:var(--accent)}
+.icon-button.is-saved svg{fill:currentColor;fill-opacity:.16}
+.side-row{position:relative;display:flex;align-items:center}
+.side-row .side-item{padding-right:32px}
+.side-star{position:absolute;right:3px;opacity:0}
+.side-row:hover .side-star,.side-row:focus-within .side-star,.side-star.is-saved{opacity:1}
+.content{display:flex;flex-direction:column;gap:8px}
+.view-toolbar{display:flex;align-items:center;gap:8px;flex:0 0 30px;min-width:0}
+.view-title{font-size:13px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.generated-at{margin-left:auto;color:var(--muted);font-size:10px;white-space:nowrap}
+.layout-control{display:flex;flex:none;border:1px solid var(--line);border-radius:4px;background:var(--canvas)}
+.layout-control .icon-button{height:28px}
+.layout-control .icon-button[aria-pressed=true]{color:var(--accent);background:#e8f0ff}
+.layout-control[hidden]{display:none}
+.chart-wrap{flex:1;height:auto;overflow:hidden}
+.chart-card{background:var(--canvas);border:1px solid var(--line);border-radius:2px;overflow:hidden;min-width:0}
+.chart-card.is-highlighted{outline:2px solid var(--accent);outline-offset:-2px}
+.chart-head{display:flex;align-items:center;gap:5px;height:30px;padding:0 6px 0 10px;border-bottom:1px solid #f0f1f3;min-width:0}
+.chart-date{font-size:11px;line-height:1.3;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.chart-date.is-old{color:#946300}
+.date-flag{font-size:10px;white-space:nowrap;color:#946300}
+.chart-head .icon-button{margin-left:auto;width:26px;height:26px;flex-basis:26px}
+.chart-cell{border:0;border-radius:0;box-shadow:none}
+dialog{margin:auto;border:1px solid var(--line);border-radius:8px;padding:0;color:var(--ink);background:var(--canvas)}
+dialog::backdrop{background:#11121466}
+.search-dialog{width:min(640px,calc(100% - 24px));max-height:calc(100% - 40px)}
+.search-top{display:flex;align-items:center;gap:8px;padding:12px;border-bottom:1px solid var(--line)}
+.search-top>svg{width:18px;height:18px;color:var(--muted);flex:none}
+.search-input{width:100%;min-width:0;border:0;outline:none;font:inherit;font-size:15px;color:var(--ink);background:transparent}
+.search-tabs{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.search-tab{font-size:13px;padding:5px 9px;cursor:pointer;border-bottom:2px solid transparent}
+.search-tab[aria-selected=true]{border-color:var(--accent);color:var(--accent)}
+.result-count{margin-left:auto;font-size:11px;color:var(--muted)}
+.search-results{max-height:min(520px,65vh);overflow-y:auto;padding:4px}
+.search-result{display:flex;align-items:center;border-bottom:1px solid #f0f1f3}
+.result-open{display:block;min-width:0;flex:1;padding:12px;cursor:pointer}
+.result-open:hover,.result-open:focus-visible{background:var(--surface)}
+.result-name{display:block;font-size:13px;font-weight:600;overflow-wrap:anywhere}
+.result-path{display:block;font-size:11px;color:var(--muted);margin-top:4px;overflow-wrap:anywhere}
+.search-result>.icon-button{margin-right:6px}
+.search-empty{padding:32px;text-align:center;color:var(--muted);font-size:13px}
+.zoom-dialog{width:calc(100% - 32px);height:calc(100% - 32px);max-width:1800px;max-height:none;overflow:hidden}
+.zoom-bar{display:flex;align-items:center;height:40px;padding:0 10px;border-bottom:1px solid var(--line)}
+.zoom-date{min-width:0;flex:1;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zoom-body{height:calc(100% - 40px);overflow:auto}
+.header{grid-column:1}
+.brand-title{font:inherit}
+.empty{display:flex;align-items:center;justify-content:center;height:100%;font-size:13px;color:var(--muted)}
+.chart-grid{overflow-y:auto;overflow-x:hidden;align-content:start;align-items:start}
 @media (max-width:720px){
-  body{grid-template-columns:144px minmax(0,1fr);grid-template-rows:48px auto minmax(0,1fr)}
+  body{grid-template-columns:132px minmax(0,1fr) 64px;grid-template-rows:48px auto minmax(0,1fr)}
   .header{grid-row:1;grid-column:1;padding:0 12px;font-size:14px;white-space:nowrap}
   .header::before{height:18px;margin-right:10px}
   .nav{grid-row:1;grid-column:2;padding:0}
@@ -73,238 +128,374 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .monthly-balance-table col.month-col{width:100px}
   .monthly-balance-table thead th,.monthly-balance-table tbody th,.monthly-balance-table tbody td{padding-left:9px;padding-right:9px}
 }
+@media (max-width:720px){
+  .header{padding:0 8px;font-size:13px}
+  .header::before{margin-right:8px}
+  .top-actions{grid-row:1;grid-column:3;gap:2px;padding:0 4px}
+  .top-actions .icon-button{width:28px;flex-basis:28px}
+  .view-toolbar{gap:4px}
+  .generated-at{display:none}
+  .layout-control{margin-left:auto}
+  .side-row{flex:0 0 auto}
+  .side-row .side-item{padding-right:34px}
+  .side-star{opacity:1}
+  .zoom-dialog{width:calc(100% - 12px);height:calc(100% - 16px)}
+  .search-results{max-height:60vh}
+}
 </style>
 </head>
 <body>
-<div class="header">锌 · 数据看板</div>
-<div class="nav" id="navBar"></div>
-<div class="sub-nav" id="subNav"></div>
+<header class="header"><h1 class="brand-title">锌 · 数据看板</h1></header>
+<nav class="nav" id="navBar" aria-label="主模块"></nav>
+<div class="top-actions"><button type="button" class="icon-button" id="searchOpen" aria-label="搜索图表" title="搜索图表"></button><button type="button" class="icon-button" id="favoritesOpen" aria-label="收藏图组" title="收藏图组"></button></div>
+<nav class="sub-nav" id="subNav" aria-label="子模块"></nav>
 <div class="main">
-  <div class="sidebar" id="sidebar"></div>
+  <aside class="sidebar" id="sidebar" aria-label="图表组"></aside>
   <div class="content" id="contentWrap">
+    <div class="view-toolbar"><div class="view-title" id="viewTitle"></div><button type="button" id="groupFavorite" class="icon-button" aria-label="收藏当前图组" title="收藏当前图组"></button><time class="generated-at" id="generatedAt"></time><div class="layout-control" role="group" aria-label="图表布局"><button type="button" class="icon-button" id="layoutStandard" aria-label="标准布局" title="标准布局" aria-pressed="true"></button><button type="button" class="icon-button" id="layoutWide" aria-label="宽图布局" title="宽图布局" aria-pressed="false"></button></div></div>
     <div class="chart-wrap" id="chartWrap"></div>
   </div>
 </div>
+<dialog class="search-dialog" id="searchDialog" aria-label="查找图表">
+  <div class="search-top"><input id="chartSearch" class="search-input" type="search" placeholder="搜索图组、指标或来源" aria-label="搜索图组、指标或来源" autocomplete="off"><button type="button" class="icon-button" id="searchClose" aria-label="关闭搜索" title="关闭搜索"></button></div>
+  <div class="search-tabs" role="tablist" aria-label="图组范围"><button type="button" class="search-tab" role="tab" id="searchAll" aria-selected="true">全部图组</button><button type="button" class="search-tab" role="tab" id="searchSaved" aria-selected="false">收藏</button><span class="result-count" id="resultCount" aria-live="polite"></span></div>
+  <div class="search-results" id="searchResults"></div>
+</dialog>
+<dialog class="zoom-dialog" id="zoomDialog" aria-label="放大图表"><div class="zoom-bar"><span class="zoom-date" id="zoomDate"></span><button type="button" class="icon-button" id="zoomClose" aria-label="关闭放大图表" title="关闭放大图表"></button></div><div class="zoom-body" id="zoomBody"></div></dialog>
 <script>
 const chartData = {};
 const MODULES = [{"id": "supply", "name": "供应", "subs": [{"name": "锌矿", "groups": [{"id": "S-01", "name": "国内锌精矿产量", "type": "single"}, {"id": "S-01c", "name": "秘鲁锌矿产量", "type": "side2"}, {"id": "S-01b", "name": "全球锌矿产量", "type": "grid4x3"}, {"id": "S-02", "name": "TC", "type": "side2"}, {"id": "S-03", "name": "锌矿出港", "type": "grid2x2"}, {"id": "S-07", "name": "锌精矿港口库存", "type": "single"}]}, {"name": "锌锭", "groups": [{"id": "S-08", "name": "国内精炼锌产量", "type": "side2"}, {"id": "S-08b", "name": "全球精炼锌产量", "type": "grid4x3"}]}, {"name": "冶炼", "groups": [{"id": "S-09", "name": "三地冶炼利润", "type": "single"}, {"id": "S-10", "name": "锌精矿原料库存", "type": "side2"}, {"id": "S-14", "name": "副产品价格", "type": "side2"}]}]}, {"id": "demand", "name": "下游", "subs": [{"name": "镀锌", "groups": [{"id": "D-01", "name": "开工&产能", "type": "side2"}, {"id": "D-02", "name": "成交", "type": "side2"}, {"id": "D-03", "name": "出口", "type": "grid2x2"}, {"id": "D-04", "name": "库存", "type": "grid2x2"}]}, {"name": "压铸", "groups": [{"id": "D-05", "name": "开工与库存", "type": "side2"}]}, {"name": "氧化锌", "groups": [{"id": "D-07", "name": "开工与库存", "type": "side2"}]}, {"name": "下游综合", "groups": [{"id": "D-09", "name": "国内下游消费指数", "type": "single"}, {"id": "D-09b", "name": "全球精炼锌消费", "type": "grid4x3"}, {"id": "D-10", "name": "国内下游库存合计", "type": "side2"}, {"id": "D-10b", "name": "全球产业链库存", "type": "side2"}, {"id": "D-11", "name": "下游周度汇总", "type": "grid4x3"}]}]}, {"id": "inventory", "name": "库存", "subs": [{"name": "国内", "groups": [{"id": "I-01", "name": "锌锭社会库存", "type": "grid2x2"}, {"id": "I-02", "name": "冶炼厂成品库存", "type": "grid2x2"}, {"id": "I-02b", "name": "国内库存可用天数", "type": "single"}, {"id": "B-01", "name": "国内表需", "type": "grid4x3"}, {"id": "B-02", "name": "国内月度平衡表", "type": "data_table"}]}, {"name": "LME", "groups": [{"id": "I-03", "name": "LME分地区库存", "type": "grid2x2"}, {"id": "I-04", "name": "LME仓单", "type": "grid2x2"}, {"id": "I-05", "name": "LME非注册+合计", "type": "side2"}]}, {"name": "隐性库存", "groups": [{"id": "I-05b", "name": "新加坡可交仓量", "type": "single"}]}, {"name": "锌全球库存合计", "groups": [{"id": "I-06", "name": "锌全球库存合计", "type": "side2"}]}]}, {"id": "spread", "name": "价差", "no_sub": true, "groups": [{"id": "P-01", "name": "现货基差", "type": "grid2x2"}, {"id": "P-02", "name": "LME 0-3 升贴水", "type": "single"}, {"id": "P-03", "name": "进口盈亏 & Premium", "type": "grid2x2"}]}, {"id": "position", "name": "持仓", "no_sub": true, "groups": [{"id": "H-01", "name": "沪锌持仓", "type": "side2"}, {"id": "H-02", "name": "LME持仓", "type": "side2"}]}, {"id": "trade", "name": "进出口", "subs": [{"name": "中国", "groups": [{"id": "T-01", "name": "锌精矿进口", "type": "grid4x3"}, {"id": "T-02", "name": "锌精矿进口YTD", "type": "grid4x3"}, {"id": "T-03", "name": "精炼锌进出口", "type": "side2"}, {"id": "T-05", "name": "镀锌板出口", "type": "grid4x3"}]}, {"name": "韩国", "groups": [{"id": "T-05b", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-06", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "日本", "groups": [{"id": "T-13", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-14", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "新加坡", "groups": [{"id": "T-07", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "印度", "groups": [{"id": "T-08b", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-08", "name": "锌锭进出口", "type": "grid4x3"}]}, {"name": "美国", "groups": [{"id": "T-12", "name": "镀锌板进口", "type": "grid4x3"}]}, {"name": "欧盟", "groups": [{"id": "T-09", "name": "锌精矿进出口", "type": "grid4x3"}, {"id": "T-10", "name": "锌锭进出口", "type": "grid4x3"}, {"id": "T-11", "name": "镀锌进出口", "type": "grid4x3"}]}]}];
+const dashboardMeta = {"generatedAt": "2026-09-06T15:27:42+08:00", "groups": {"S-01": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}], "source": "钢联"}], "S-01c": [{"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "锌其他数据"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "锌其他数据"}], "S-01b": [{"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}], "S-02": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "进口锌精矿指数", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}, {"name": "Zn50内蒙古国产TC", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}, {"name": "Zn50云南国产TC", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-12-31", "earliest": "2026-12-31", "frequency": "年度", "forecastThrough": null, "longInterval": false, "series": [{"name": "锌精矿年度长协", "date": "2026-12-31", "frequency": "年度", "forecast": false, "longInterval": false, "intervalRule": ""}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "国内锌矿利润", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "计算"}], "S-03": [{"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}], "S-07": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "钢联"}], "S-08": [{"latest": "2026-08-31", "earliest": "2026-08-31", "frequency": "月度", "forecastThrough": "2026-12-31", "longInterval": false, "series": [{"name": "2026", "date": "2026-08-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}, {"name": "2026预估", "date": "2026-12-31", "frequency": "月度", "forecast": true}], "source": "SMM/锌其他数据"}, {"latest": "2026-09-30", "earliest": "2026-08-31", "frequency": "月度", "forecastThrough": "2026-12-31", "longInterval": false, "series": [{"name": "精炼锌产量", "date": "2026-08-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}, {"name": "进口矿冶炼利润", "date": "2026-09-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}, {"name": "精炼锌产量预估", "date": "2026-12-31", "frequency": "月度", "forecast": true}], "source": "SMM/计算"}], "S-08b": [{"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}], "S-09": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "内蒙古", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}, {"name": "广西", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}, {"name": "云南", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "SMM"}], "S-10": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "钢联"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "钢联"}, {"latest": "2026-08-31", "earliest": "2026-08-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}], "source": "SMM"}, {"latest": "2026-08-31", "earliest": "2026-08-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}], "source": "SMM"}], "S-14": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "硫酸出厂价", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}, {"name": "沪银指数", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "精铟价格", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}, {"name": "镉锭条价格", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}], "D-01": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "钢联"}], "D-02": [{"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "钢联"}, {"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "钢联"}], "D-03": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "钢联"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "钢联"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "计算"}], "D-04": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "钢联"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "钢联"}], "D-05": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}], "D-07": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}], "D-09": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}], "D-09b": [{"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}], "D-10": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}], "D-10b": [{"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}, {"latest": "2026-05-31", "earliest": "2026-05-31", "frequency": "月度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-05-31", "frequency": "月度", "forecast": false, "longInterval": true, "intervalRule": "月度序列超过 3 个月"}], "source": "Wind"}], "D-11": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}], "I-01": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}, {"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "钢联"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM"}], "I-02": [{"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "钢联"}, {"latest": "2026-08-31", "earliest": "2026-08-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}], "source": "SMM"}, {"latest": "2026-08-31", "earliest": "2026-08-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}], "source": "SMM"}, {"latest": "2026-08-31", "earliest": "2026-08-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-08-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}], "source": "SMM"}], "I-02b": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "计算"}], "I-03": [{"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2026-04-16", "earliest": "2026-04-16", "frequency": "日度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-04-16", "frequency": "日度", "forecast": false, "longInterval": true, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2023-01-03", "earliest": "2023-01-03", "frequency": "日度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2023", "date": "2023-01-03", "frequency": "日度", "forecast": false, "longInterval": true, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}], "I-04": [{"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}], "I-05": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "SMM"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "计算"}], "I-05b": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "SMM/Wind/新加坡海关/计算"}], "I-06": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "计算"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "计算"}], "P-01": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "各品种基差"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "各品种基差"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "各品种基差"}], "P-02": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}], "P-03": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "钢联"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "日度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-08-28", "frequency": "日度", "forecast": false, "longInterval": true, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "海外"}, {"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "日度", "forecastThrough": null, "longInterval": true, "series": [{"name": "2026", "date": "2026-08-28", "frequency": "日度", "forecast": false, "longInterval": true, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "海外"}], "H-01": [{"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "Wind"}], "H-02": [{"latest": "2026-08-28", "earliest": "2026-08-28", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "LME投资基金净持仓", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}, {"name": "LME商业企业净持仓", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}, {"name": "LME3M锌收盘价", "date": "2026-08-28", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "Wind"}, {"latest": "2026-09-03", "earliest": "2026-09-03", "frequency": "日度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-03", "frequency": "日度", "forecast": false, "longInterval": false, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "彭博"}], "T-01": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}], "T-02": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}], "T-03": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "澳大利亚", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "哈萨克斯坦", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "其他国家", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "出口东南亚", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "出口韩国", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "出口台湾香港", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "出口其他", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-08-28", "earliest": "2026-07-31", "frequency": "混合频率", "forecastThrough": null, "longInterval": true, "series": [{"name": "出口东南亚", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "东南亚Premium", "date": "2026-08-28", "frequency": "日度", "forecast": false, "longInterval": true, "intervalRule": "日度序列超过 3 个工作日；未扣除节假日"}], "source": "中国海关/海外"}], "T-05": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "中国海关"}], "T-05b": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}], "T-06": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "韩国海关"}], "T-07": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "新加坡海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "新加坡海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "新加坡海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "新加坡海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "新加坡海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "新加坡海关"}], "T-08": [{"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "India TradeStat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "India TradeStat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "India TradeStat"}], "T-08b": [{"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "India TradeStat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "India TradeStat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "India TradeStat"}], "T-13": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "日本海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "日本海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "日本海关"}], "T-14": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "日本海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "日本海关"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "日本海关"}], "T-09": [{"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}], "T-10": [{"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}], "T-11": [{"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "Eurostat"}], "T-12": [{"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "USITC DataWeb"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "USITC DataWeb"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "USITC DataWeb"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "USITC DataWeb"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "USITC DataWeb"}, {"latest": "2026-06-30", "earliest": "2026-06-30", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-06-30", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "USITC DataWeb"}], "B-01": [{"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": "2026-12-31", "longInterval": false, "series": [{"name": "2026", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 2 个月"}, {"name": "2026预估", "date": "2026-12-31", "frequency": "月度", "forecast": true}], "source": "计算"}, {"latest": "2026-09-04", "earliest": "2026-09-04", "frequency": "周度", "forecastThrough": null, "longInterval": false, "series": [{"name": "2026", "date": "2026-09-04", "frequency": "周度", "forecast": false, "longInterval": false, "intervalRule": "周度序列超过 14 天"}], "source": "SMM/海关/计算"}, {"latest": "2026-07-31", "earliest": "2026-07-31", "frequency": "月度", "forecastThrough": null, "longInterval": false, "series": [{"name": "累计变化量", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "当月同比", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}, {"name": "累计同比", "date": "2026-07-31", "frequency": "月度", "forecast": false, "longInterval": false, "intervalRule": "月度序列超过 3 个月"}], "source": "SMM/海关/计算"}], "B-02": []}};
 const STATE_KEY = 'zincDashboardState';
+/* Icon nodes from Lucide 1.8.0, https://lucide.dev.
+ISC License. Copyright (c) 2026 Lucide Icons and Contributors.
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+Feather-derived icons (search, x): MIT License.
+Copyright (c) 2013-present Cole Bemis.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+const ICONS={
+  search:[['path',{d:'m21 21-4.34-4.34'}],['circle',{cx:'11',cy:'11',r:'8'}]],
+  star:[['path',{d:'M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z'}]],
+  standard:[['path',{d:'M12 3v18'}],['path',{d:'M3 12h18'}],['rect',{x:'3',y:'3',width:'18',height:'18',rx:'2'}]],
+  wide:[['rect',{width:'18',height:'18',x:'3',y:'3',rx:'2'}],['path',{d:'M12 3v18'}]],
+  expand:[['path',{d:'M15 3h6v6'}],['path',{d:'m21 3-7 7'}],['path',{d:'m3 21 7-7'}],['path',{d:'M9 21H3v-6'}]],
+  close:[['path',{d:'M18 6 6 18'}],['path',{d:'m6 6 12 12'}]]
+};
+function icon(name){
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  Object.entries({viewBox:'0 0 24 24',fill:'none',stroke:'currentColor','stroke-width':'1.8','stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':'true'}).forEach(([k,v])=>svg.setAttribute(k,v));
+  (ICONS[name]||[]).forEach(([tag,attrs])=>{const node=document.createElementNS(svg.namespaceURI,tag);Object.entries(attrs).forEach(([k,v])=>node.setAttribute(k,v));svg.appendChild(node);});
+  return svg;
+}
+function iconButton(name,label,handler){
+  const b=document.createElement('button');b.type='button';b.className='icon-button';b.title=label;b.setAttribute('aria-label',label);b.appendChild(icon(name));b.onclick=handler;return b;
+}
+function moduleSubs(m){return m?.no_sub?[{name:'',groups:m.groups||[]}]:m?.subs||[];}
+const normalizeSearch=value=>String(value||'').normalize('NFKC').toLowerCase().replace(/\s+/g,' ').trim();
+const GROUP_INDEX=MODULES.flatMap((m,mi)=>moduleSubs(m).flatMap((s,si)=>(s.groups||[]).map((g,gi)=>{
+  const cfg=chartData[g.id], charts=(cfg?(cfg.charts||(cfg.data?[cfg]:[])):[]).filter(c=>c&&c.data?.length);
+  const titles=charts.map(c=>c.layout?.title?.text||'');
+  const series=charts.flatMap(c=>(c.data||[]).map(t=>t.name));
+  const sources=[cfg?.source,...(cfg?.rows||[]).map(r=>r.label),...charts.flatMap(c=>(c.layout?.annotations||[]).map(a=>a.text))];
+  return {...g,mi,si,gi,moduleName:m.name,subName:s.name,titles,searchText:normalizeSearch([m.name,s.name,g.name,g.id,...titles,...series,...sources].join(' '))};
+})));
 let currentModule = 0;
 let currentSub = 0;
-let currentGroupIdx = 0;
-
-function readState() {
-  try {
-    const state = JSON.parse(localStorage.getItem(STATE_KEY) || '{}');
-    return {
-      module: Number.isInteger(state.module) ? state.module : 0,
-      sub: Number.isInteger(state.sub) ? state.sub : 0,
-      group: Number.isInteger(state.group) ? state.group : 0,
-    };
-  } catch (e) {
-    return {module: 0, sub: 0, group: 0};
+let currentGroup = 0;
+let currentGroups = [];
+let renderGeneration = 0;
+let renderTimer = null;
+let resizeTimer = null;
+let searchFavorites=false;
+let pendingChartIndex=null;
+let zoomChart=null;
+let zoomGeneration=0;
+let zoomViewport='';
+const dashboardState=loadState();
+const storedMap=value=>value&&typeof value==='object'&&!Array.isArray(value)?value:{};
+dashboardState.moduleGroups=storedMap(dashboardState.moduleGroups);
+dashboardState.subGroups=storedMap(dashboardState.subGroups);
+dashboardState.layouts=storedMap(dashboardState.layouts);
+dashboardState.favorites=Array.isArray(dashboardState.favorites)?dashboardState.favorites.filter(id=>GROUP_INDEX.some(g=>g.id===id)):[];
+function clampIndex(value, length){
+  const n=Number.isInteger(value)?value:parseInt(value,10);
+  if(!length){return 0;}
+  return Number.isFinite(n)?Math.max(0,Math.min(length-1,n)):0;
+}
+function loadState(){
+  try{
+    const state=JSON.parse(localStorage.getItem(STATE_KEY)||'{}');
+    return state&&typeof state==='object'&&!Array.isArray(state)?state:{};
   }
+  catch(e){return {};}
 }
-
-function saveState() {
-  try {
-    localStorage.setItem(STATE_KEY, JSON.stringify({
-      module: currentModule,
-      sub: currentSub,
-      group: currentGroupIdx,
-    }));
-  } catch (e) {}
+function saveState(){
+  const m=MODULES[currentModule], s=moduleSubs(m)[currentSub], g=currentGroups[currentGroup];
+  Object.assign(dashboardState,{version:2,module:currentModule,sub:currentSub,group:currentGroup,groupId:g?.id});
+  if(g){dashboardState.moduleGroups[m.id]=g.id;dashboardState.subGroups[m.id+':'+s.name]=g.id;}
+  try{localStorage.setItem(STATE_KEY,JSON.stringify(dashboardState));}
+  catch(e){}
 }
-
-function clampIndex(value, length) {
-  if (!length) return 0;
-  return Math.max(0, Math.min(value, length - 1));
+function revealNavigation(){
+  requestAnimationFrame(()=>document.querySelectorAll('.nav-item.active,.sub-item.active,.side-item.active').forEach(e=>e.scrollIntoView({block:'nearest',inline:'nearest'})));
 }
-
-function getGroups(mi, si) {
-  const m = MODULES[mi];
-  if (!m) return [];
-  return m.no_sub ? (m.groups || []) : ((m.subs && m.subs[si]) ? m.subs[si].groups : []);
-}
-
-function buildNav() {
-  const navBar = document.getElementById('navBar');
-  const saved = readState();
-  const initialModule = clampIndex(saved.module, MODULES.length);
-  MODULES.forEach((m,i) => {
-    const div = document.createElement('button');
-    div.type = 'button';
-    div.className = 'nav-item' + (i===initialModule?' active':'');
-    div.textContent = m.name;
-    div.addEventListener('click', () => selectModule(i));
-    navBar.appendChild(div);
+function syncFavoriteButtons(){
+  document.querySelectorAll('[data-favorite]').forEach(button=>{
+    const saved=dashboardState.favorites.includes(button.dataset.favorite);
+    const group=GROUP_INDEX.find(g=>g.id===button.dataset.favorite);
+    const label=(saved?'取消收藏：':'收藏：')+(group?.name||'当前图组');
+    button.classList.toggle('is-saved',saved);button.setAttribute('aria-pressed',String(saved));button.setAttribute('aria-label',label);button.title=label;
   });
-  selectModule(initialModule, saved.sub, saved.group);
 }
-
-function selectModule(i, subIdx = 0, groupIdx = 0) {
-  currentModule = clampIndex(i, MODULES.length);
-  const m = MODULES[currentModule];
-  const nextSub = m.no_sub ? 0 : clampIndex(subIdx, m.subs ? m.subs.length : 0);
-  document.querySelectorAll('.nav-item').forEach((el,j) => {
-    const active = j === currentModule;
-    el.classList.toggle('active', active);
-    el.setAttribute('aria-pressed', String(active));
-  });
-  const subNav = document.getElementById('subNav'); subNav.innerHTML = '';
-  subNav.classList.toggle('is-empty', m.no_sub || !m.subs || m.subs.length === 0);
-  if (!m.no_sub && m.subs) {
-    m.subs.forEach((s,j) => {
-      const span = document.createElement('button');
-      span.type = 'button';
-      span.className = 'sub-item' + (j===nextSub?' active':'');
-      span.textContent = s.name;
-      span.addEventListener('click', () => selectSub(currentModule, j));
-      subNav.appendChild(span);
-    });
+function toggleFavorite(id){
+  if(dashboardState.favorites.includes(id)){dashboardState.favorites=dashboardState.favorites.filter(value=>value!==id);}
+  else{dashboardState.favorites.push(id);}
+  saveState();syncFavoriteButtons();
+  if(document.getElementById('searchDialog').open)renderSearch();
+}
+function buildNav(){
+  const nav=document.getElementById('navBar');
+  MODULES.forEach((m,i)=>{const d=document.createElement('button');d.type='button';d.className='nav-item';d.textContent=m.name;d.onclick=()=>selectModule(i);nav.appendChild(d);});
+  if(!MODULES.length){renderChart(null);return;}
+  const saved=GROUP_INDEX.find(g=>g.id===dashboardState.groupId);
+  if(saved){selectModule(saved.mi,saved.si,saved.gi);}
+  else{selectModule(clampIndex(dashboardState.module,MODULES.length),dashboardState.sub||0,dashboardState.group||0);}
+}
+function selectModule(i,subIndex,groupIndex){
+  if(subIndex===undefined){
+    const remembered=GROUP_INDEX.find(g=>g.mi===i&&g.id===dashboardState.moduleGroups[MODULES[i].id]);
+    subIndex=remembered?.si||0;groupIndex=remembered?.gi||0;
   }
-  selectSub(currentModule, nextSub, groupIdx);
+  currentModule=i;
+  document.querySelectorAll('.nav-item').forEach((e,j)=>{e.classList.toggle('active',j===i);e.setAttribute('aria-current',j===i?'page':'false');});
+  const m=MODULES[i], sub=document.getElementById('subNav'); sub.innerHTML='';
+  const subs=moduleSubs(m);
+  sub.classList.toggle('is-empty',m.no_sub||subs.length===0);
+  if(subs.length===0){currentSub=0;currentGroup=0;currentGroups=[];renderSidebar([],0);renderChart(null);saveState();return;}
+  if(!m.no_sub)subs.forEach((s,j)=>{const d=document.createElement('button');d.type='button';d.className='sub-item';d.textContent=s.name;d.onclick=()=>selectSub(j);sub.appendChild(d);});
+  selectSub(clampIndex(subIndex,subs.length),groupIndex);
 }
-
-function selectSub(mi, j, groupIdx = 0) {
-  currentModule = clampIndex(mi, MODULES.length);
-  const m = MODULES[mi];
-  currentSub = m.no_sub ? 0 : clampIndex(j, m.subs ? m.subs.length : 0);
-  document.querySelectorAll('.sub-item').forEach((el,k) => {
-    const active = k === currentSub;
-    el.classList.toggle('active', active);
-    el.setAttribute('aria-pressed', String(active));
-  });
-  const sidebar = document.getElementById('sidebar'); sidebar.innerHTML = '';
-  const groups = getGroups(mi, currentSub);
-  const nextGroup = clampIndex(groupIdx, groups.length);
-  groups.forEach((g,k) => {
-    const div = document.createElement('button');
-    div.type = 'button';
-    div.className = 'side-item' + (k===nextGroup?' active':'');
-    div.textContent = g.name;
-    div.addEventListener('click', () => selectGroup(mi, currentSub, k));
-    sidebar.appendChild(div);
-  });
-  selectGroup(mi, currentSub, nextGroup);
+function selectSub(j,groupIndex){
+  currentSub=j;
+  document.querySelectorAll('.sub-item').forEach((e,k)=>{e.classList.toggle('active',k===j);e.setAttribute('aria-current',k===j?'page':'false');});
+  const groups=(moduleSubs(MODULES[currentModule])[j]||{}).groups||[];
+  currentGroups=groups;
+  if(groupIndex===undefined){groupIndex=groups.findIndex(g=>g.id===dashboardState.subGroups[MODULES[currentModule].id+':'+moduleSubs(MODULES[currentModule])[j].name]);}
+  const activeGroup=clampIndex(groupIndex,groups.length);
+  renderSidebar(groups,activeGroup);
+  if(groups.length){selectGroup(activeGroup, groups);} else {currentGroup=0;renderChart(null);saveState();}
 }
-
-function selectGroup(mi, si, k) {
-  currentModule = clampIndex(mi, MODULES.length);
-  currentSub = MODULES[currentModule].no_sub ? 0 : si;
-  const groups = getGroups(currentModule, currentSub);
-  currentGroupIdx = clampIndex(k, groups.length);
-  document.querySelectorAll('.side-item').forEach((el,idx) => {
-    const active = idx === currentGroupIdx;
-    el.classList.toggle('active', active);
-    el.setAttribute('aria-pressed', String(active));
+function renderSidebar(groups,activeIndex){
+  const side=document.getElementById('sidebar'); side.innerHTML='';
+  groups.forEach((g,k)=>{
+    const row=document.createElement('div');row.className='side-row';
+    const d=document.createElement('button');d.type='button';d.className='side-item'+(k===activeIndex?' active':'');d.textContent=g.name;d.setAttribute('aria-current',k===activeIndex?'page':'false');d.onclick=()=>selectGroup(k,groups);
+    const star=iconButton('star','收藏：'+g.name,()=>toggleFavorite(g.id));star.classList.add('side-star');star.dataset.favorite=g.id;
+    row.append(d,star);side.appendChild(row);
   });
-  if (!groups[currentGroupIdx]) return;
+  syncFavoriteButtons();
+}
+function selectGroup(k, groups=currentGroups){
+  if(document.getElementById('zoomDialog').open)document.getElementById('zoomDialog').close();
+  currentGroup=k;
+  currentGroups=groups;
+  document.querySelectorAll('.side-item').forEach((e,i)=>{e.classList.toggle('active',i===k);e.setAttribute('aria-current',i===k?'page':'false');});
+  renderChart(chartData[groups[k].id]);
   saveState();
-  renderChart(chartData[groups[currentGroupIdx].id]);
+  revealNavigation();
 }
-
-function enablePointerDrag(scroller) {
-  let drag = null;
-
-  scroller.addEventListener('pointerdown', event => {
-    if (event.pointerType !== 'mouse' || event.button !== 0 || scroller.scrollWidth <= scroller.clientWidth) return;
-    drag = {id:event.pointerId, x:event.clientX, left:scroller.scrollLeft, moved:false};
+function openSearch(saved=false){
+  searchFavorites=saved;
+  document.getElementById('chartSearch').value='';
+  renderSearch();document.getElementById('searchDialog').showModal();document.getElementById('chartSearch').focus();
+}
+function renderSearch(){
+  const query=normalizeSearch(document.getElementById('chartSearch').value),terms=query.split(' ').filter(Boolean);
+  const matches=GROUP_INDEX.filter(g=>(!searchFavorites||dashboardState.favorites.includes(g.id))&&terms.every(term=>g.searchText.includes(term)));
+  document.getElementById('searchAll').setAttribute('aria-selected',String(!searchFavorites));
+  document.getElementById('searchSaved').setAttribute('aria-selected',String(searchFavorites));
+  document.getElementById('resultCount').textContent=matches.length+' 个图组';
+  const list=document.getElementById('searchResults');list.replaceChildren();
+  matches.forEach(g=>{
+    const row=document.createElement('div');row.className='search-result';
+    const button=document.createElement('button');button.type='button';button.className='result-open';
+    const name=document.createElement('span');name.className='result-name';name.textContent=g.name;
+    const path=document.createElement('span');path.className='result-path';path.textContent=[g.moduleName,g.subName].filter(Boolean).join(' / ');
+    const chartIndex=query?g.titles.findIndex(title=>terms.every(term=>normalizeSearch(title).includes(term))):-1;
+    if(chartIndex>=0&&g.titles[chartIndex]!==g.name)path.textContent+=' / '+g.titles[chartIndex];
+    button.append(name,path);button.onclick=()=>{
+      pendingChartIndex=chartIndex>=0?{id:g.id,index:chartIndex}:null;
+      document.getElementById('searchDialog').close();selectModule(g.mi,g.si,g.gi);
+    };
+    const star=iconButton('star','收藏：'+g.name,()=>toggleFavorite(g.id));star.dataset.favorite=g.id;
+    row.append(button,star);list.appendChild(row);
+  });
+  if(!matches.length){const empty=document.createElement('div');empty.className='search-empty';empty.textContent=searchFavorites&&!query?'暂无收藏':'无匹配结果';list.appendChild(empty);}
+  syncFavoriteButtons();
+}
+function displayDate(value,frequency){return !value?'未标注':frequency==='年度'?value.slice(0,4):frequency==='月度'?value.slice(0,7):value;}
+function dateLabel(meta){
+  if(!meta)return '数据日期未标注';
+  const frequency=meta.frequency?meta.frequency+' · ':'';
+  return meta.latest?frequency+'截至 '+displayDate(meta.latest,meta.frequency):meta.forecastThrough?'预估至 '+meta.forecastThrough:'数据日期未标注';
+}
+function dateDetails(meta){
+  if(!meta)return '';
+  return (meta.series||[]).map(s=>s.name+'：'+displayDate(s.date,s.frequency)+(s.forecast?'（预估）':'')+(s.longInterval?'；更新间隔偏长（'+s.intervalRule+'，仅供提示）':'')).join('\n');
+}
+function purgeCharts(wrap){
+  if(!window.Plotly||typeof Plotly.purge!=='function'){return;}
+  wrap.querySelectorAll('.js-plotly-plot').forEach(node=>Plotly.purge(node));
+}
+function showChartError(target,generation,error){
+  if(generation!==renderGeneration||!target.isConnected){return;}
+  if(window.Plotly&&typeof Plotly.purge==='function'){Plotly.purge(target);}
+  const message=document.createElement('div');
+  message.className='empty';
+  message.textContent='图表加载失败';
+  target.replaceChildren(message);
+  if(error){console.error(error);}
+}
+function stackChartFooter(target,layout,cellH){
+  const annotations=(layout.annotations||[]).map(annotation=>({...annotation}));
+  const sourceIndex=annotations.findIndex(annotation=>typeof annotation.text==='string'&&annotation.text.startsWith('数据来源:'));
+  const legend=target.querySelector('g.legend');
+  const sourceText=[...target.querySelectorAll('text')].find(node=>(node.textContent||'').trim().startsWith('数据来源:'));
+  if(!target.isConnected||!target._fullLayout){return Promise.resolve();}
+  const legendHeight=legend?Math.ceil(legend.getBoundingClientRect().height):0;
+  const sourceHeight=sourceText?Math.ceil(sourceText.getBoundingClientRect().height):0;
+  const sourceBottom=8, gap=8;
+  const legendTop=sourceBottom+sourceHeight+(sourceHeight?gap:0)+legendHeight;
+  const size=target._fullLayout._size, rect=target.getBoundingClientRect();
+  const axisBottom=rect.top+size.t+size.h;
+  const tickBottom=Math.max(axisBottom,...[...target.querySelectorAll('.xtick text,.g-xtitle')].map(node=>node.getBoundingClientRect().bottom));
+  const tickDepth=Math.ceil(tickBottom-axisBottom);
+  const margin={...(layout.margin||{})};
+  margin.b=Math.max(48,legendTop+tickDepth+gap);
+  margin.autoexpand=false;
+  const minimumPlot=legendHeight>80?(innerWidth<=720?140:180):(innerWidth<=720?100:120);
+  const height=Math.max(cellH,(margin.t||0)+margin.b+minimumPlot);
+  target.style.height=height+'px';
+  if(target.parentElement.classList.contains('chart-card'))target.parentElement.style.height=(height+30)+'px';
+  const plotH=Math.max(1,height-(margin.t||0)-margin.b);
+  if(sourceIndex>=0)annotations[sourceIndex]={...annotations[sourceIndex],y:(sourceBottom-margin.b)/plotH,yanchor:'bottom'};
+  const changes={height,margin,annotations,'xaxis.automargin':false};
+  if(legend){changes['legend.y']=(legendTop-margin.b)/plotH;changes['legend.yanchor']='top';}
+  return Plotly.relayout(target,changes).then(()=>{if(target.isConnected)target.dataset.footerReady='true';});
+}
+function enablePointerDrag(scroller){
+  let drag=null;
+  scroller.addEventListener('pointerdown',event=>{
+    if(event.pointerType!=='mouse'||event.button!==0||scroller.scrollWidth<=scroller.clientWidth){return;}
+    drag={id:event.pointerId,x:event.clientX,left:scroller.scrollLeft,moved:false};
     scroller.setPointerCapture(event.pointerId);
   });
-
-  scroller.addEventListener('pointermove', event => {
-    if (!drag || drag.id !== event.pointerId) return;
-    const dx = event.clientX - drag.x;
-    if (!drag.moved && Math.abs(dx) < 4) return;
-    drag.moved = true;
+  scroller.addEventListener('pointermove',event=>{
+    if(!drag||drag.id!==event.pointerId){return;}
+    const dx=event.clientX-drag.x;
+    if(!drag.moved&&Math.abs(dx)<4){return;}
+    drag.moved=true;
     scroller.classList.add('is-dragging');
-    scroller.scrollLeft = drag.left - dx;
+    scroller.scrollLeft=drag.left-dx;
     event.preventDefault();
   });
-
-  const endDrag = event => {
-    if (!drag || drag.id !== event.pointerId) return;
-    if (scroller.hasPointerCapture(event.pointerId)) scroller.releasePointerCapture(event.pointerId);
-    drag = null;
+  const endDrag=event=>{
+    if(!drag||drag.id!==event.pointerId){return;}
+    if(scroller.hasPointerCapture(event.pointerId)){scroller.releasePointerCapture(event.pointerId);}
+    drag=null;
     scroller.classList.remove('is-dragging');
   };
-  scroller.addEventListener('pointerup', endDrag);
-  scroller.addEventListener('pointercancel', endDrag);
+  scroller.addEventListener('pointerup',endDrag);
+  scroller.addEventListener('pointercancel',endDrag);
 }
-
-function renderDataTable(wrap, cfg) {
-  if (!cfg.rows || cfg.rows.length === 0) return;
-
-  const shell = document.createElement('section');
-  shell.className = 'data-table-shell';
-  shell.setAttribute('aria-label', '国内月度平衡表');
-
-  const meta = document.createElement('div');
-  meta.className = 'data-table-meta';
-  const year = document.createElement('span');
-  year.className = 'data-table-year';
-  year.textContent = String(cfg.year) + '年';
+function renderDataTable(wrap,cfg){
+  if(!cfg.rows||!cfg.rows.length){return;}
+  const shell=document.createElement('section');
+  shell.className='data-table-shell';
+  shell.setAttribute('aria-label','国内月度平衡表');
+  const meta=document.createElement('div');
+  meta.className='data-table-meta';
+  const year=document.createElement('span');
+  year.className='data-table-year';
+  year.textContent=String(cfg.year)+'年';
   meta.appendChild(year);
-  if (cfg.source) {
-    const source = document.createElement('span');
-    source.className = 'data-table-source';
-    source.textContent = '数据来源: ' + cfg.source;
+  if(cfg.source){
+    const source=document.createElement('span');
+    source.className='data-table-source';
+    source.textContent='数据来源: '+cfg.source;
     meta.appendChild(source);
   }
   shell.appendChild(meta);
-
-  const scroller = document.createElement('div');
-  scroller.className = 'data-table-scroll is-draggable';
-  scroller.tabIndex = 0;
-  scroller.setAttribute('role', 'region');
-  scroller.setAttribute('aria-label', String(cfg.year) + '年国内月度平衡表');
-
-  const table = document.createElement('table');
-  table.className = 'monthly-balance-table';
-  const colgroup = document.createElement('colgroup');
-  (cfg.headers || []).forEach((_, index) => {
-    const col = document.createElement('col');
-    col.className = index === 0 ? 'metric-col' : 'month-col';
+  const scroller=document.createElement('div');
+  scroller.className='data-table-scroll is-draggable';
+  scroller.tabIndex=0;
+  scroller.setAttribute('role','region');
+  scroller.setAttribute('aria-label',String(cfg.year)+'年国内月度平衡表');
+  const table=document.createElement('table');
+  table.className='monthly-balance-table';
+  const colgroup=document.createElement('colgroup');
+  (cfg.headers||[]).forEach((_,index)=>{
+    const col=document.createElement('col');
+    col.className=index===0?'metric-col':'month-col';
     colgroup.appendChild(col);
   });
   table.appendChild(colgroup);
-
-  const thead = document.createElement('thead');
-  const headerRow = document.createElement('tr');
-  (cfg.headers || []).forEach(label => {
-    const th = document.createElement('th');
-    th.scope = 'col';
-    th.textContent = label;
+  const thead=document.createElement('thead');
+  const headerRow=document.createElement('tr');
+  (cfg.headers||[]).forEach(text=>{
+    const th=document.createElement('th');
+    th.scope='col';
+    th.textContent=text;
     headerRow.appendChild(th);
   });
   thead.appendChild(headerRow);
   table.appendChild(thead);
-
-  const tbody = document.createElement('tbody');
-  cfg.rows.forEach(row => {
-    const tr = document.createElement('tr');
-    const metric = document.createElement('th');
-    metric.scope = 'row';
-    const label = document.createElement('span');
-    label.className = 'metric-main';
-    label.textContent = row.label;
+  const tbody=document.createElement('tbody');
+  cfg.rows.forEach(row=>{
+    const tr=document.createElement('tr');
+    const metric=document.createElement('th');
+    metric.scope='row';
+    const label=document.createElement('span');
+    label.className='metric-main';
+    label.textContent=row.label;
     metric.appendChild(label);
-    if (row.unit) {
-      const unit = document.createElement('span');
-      unit.className = 'metric-unit';
-      unit.textContent = row.unit;
+    if(row.unit){
+      const unit=document.createElement('span');
+      unit.className='metric-unit';
+      unit.textContent=row.unit;
       metric.appendChild(unit);
     }
     tr.appendChild(metric);
-    (row.values || []).forEach(value => {
-      const td = document.createElement('td');
-      if (value === null || value === undefined || value === '') {
-        td.className = 'balance-empty';
-        td.textContent = '--';
-      } else {
-        td.textContent = String(value);
-      }
+    (row.values||[]).forEach(value=>{
+      const td=document.createElement('td');
+      if(value===null||value===undefined||value===''){
+        td.className='balance-empty';
+        td.textContent='--';
+      }else{td.textContent=String(value);}
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -315,173 +506,157 @@ function renderDataTable(wrap, cfg) {
   wrap.appendChild(shell);
   enablePointerDrag(scroller);
 }
-
-function estimateLegendRows(names, availableWidth, fontSize) {
-  if (!names.length) return 0;
-  let rows = 1;
-  let rowWidth = 0;
-  for (const name of names) {
-    const textWidth = [...String(name)].reduce((width, char) => {
-      return width + (char.codePointAt(0) > 255 ? fontSize : fontSize * 0.62);
-    }, 0);
-    const itemWidth = Math.min(availableWidth, 54 + textWidth);
-    if (rowWidth > 0 && rowWidth + itemWidth > availableWidth) {
-      rows += 1;
-      rowWidth = itemWidth;
-    } else {
-      rowWidth += itemWidth;
-    }
-  }
-  return rows;
-}
-
-function centerPlotVertically(el, layout, cellH) {
-  const legend = el.querySelector('.legend');
-  const source = [...el.querySelectorAll('.annotation-text')]
-    .find(node => (node.textContent || '').startsWith('数据来源'));
-  if (!legend || !source) {
-    el.dataset.layoutReady = '1';
-    return Promise.resolve();
-  }
-  const freeGap = source.getBoundingClientRect().top - legend.getBoundingClientRect().bottom;
-  const shift = Math.max(0, Math.min(16, Math.floor(freeGap - 10)));
-  if (shift < 2) {
-    el.dataset.layoutReady = '1';
-    return Promise.resolve();
-  }
-  layout.margin = {
-    ...layout.margin,
-    t: (Number(layout.margin.t) || 0) + shift,
-    b: (Number(layout.margin.b) || 0) - shift,
-  };
-  const plotH = Math.max(1, cellH - (Number(layout.margin.t) || 0) - (Number(layout.margin.b) || 0));
-  const bottomSourceY = (2 - (Number(layout.margin.b) || 0)) / plotH;
-  (layout.annotations || []).forEach(annotation => {
-    if (typeof annotation.text !== 'string' || !annotation.text.startsWith('数据来源')) return;
-    annotation.y = bottomSourceY;
-    annotation.yanchor = 'bottom';
+function renderChart(cfg){
+  const generation=++renderGeneration;
+  if(renderTimer!==null){clearTimeout(renderTimer);renderTimer=null;}
+  const wrap=document.getElementById('chartWrap');
+  purgeCharts(wrap);
+  wrap.replaceChildren();
+  const groupId=Object.keys(chartData).find(id=>chartData[id]===cfg);
+  const group=GROUP_INDEX.find(g=>g.id===groupId);
+  document.getElementById('viewTitle').textContent=group?.name||'';
+  const favorite=document.getElementById('groupFavorite');
+  favorite.dataset.favorite=groupId||'';favorite.disabled=!groupId;favorite.onclick=()=>toggleFavorite(groupId);
+  syncFavoriteButtons();
+  const wide=dashboardState.layouts[groupId]==='wide';
+  document.getElementById('layoutStandard').setAttribute('aria-pressed',String(!wide));
+  document.getElementById('layoutWide').setAttribute('aria-pressed',String(wide));
+  document.querySelector('.layout-control').hidden=cfg?.type==='data_table';
+  if(!cfg){wrap.innerHTML='<div class="empty">该模块图表待确认</div>';return;}
+  if(cfg.type==='data_table'){renderDataTable(wrap,cfg);return;}
+  let charts=[];
+  if(cfg.charts){charts=cfg.charts.filter(c=>c&&c.data&&c.data.length);}
+  else if(cfg.data){charts=[cfg];}
+  if(!charts.length){wrap.innerHTML='<div class="empty">该图组暂无可用数据</div>';return;}
+  const rect=wrap.getBoundingClientRect();
+  const cw=Math.max(1,Math.floor(rect.width)),ch=Math.max(1,Math.floor(rect.height));
+  const cols=innerWidth<=720?1:wide?Math.min(cw>=640?2:1,charts.length):(cw>=1040?3:cw>=640?2:1);
+  const visibleRows=wide?Math.min(2,Math.ceil(charts.length/cols)):2;
+  const gap=8, gridPad=4, cellW=Math.max(1,Math.floor((cw-gridPad-gap*(cols-1))/cols));
+  const halfHeight=Math.max(1,Math.floor((ch-gap*(visibleRows-1))/visibleRows));
+  const cellH=Math.max(260,halfHeight);
+  const grid=document.createElement('div');
+  grid.className='chart-grid';
+  grid.style.cssText='display:grid;grid-template-columns:repeat('+cols+','+cellW+'px);gap:'+gap+'px;width:'+cw+'px;max-height:'+ch+'px;padding-right:'+gridPad+'px;';
+  const cells=charts.map((chart,i)=>{
+    const meta=dashboardMeta.groups[groupId]?.[i];
+    const card=document.createElement('article');card.className='chart-card';card.style.cssText='width:'+cellW+'px;min-height:'+cellH+'px;';card.dataset.chartIndex=i;
+    const head=document.createElement('div');head.className='chart-head';
+    const date=document.createElement('span');date.className='chart-date'+(meta?.longInterval?' is-old':'');date.textContent=dateLabel(meta);date.title=dateDetails(meta);date.tabIndex=0;
+    head.appendChild(date);
+    const flagText=[meta?.forecastThrough&&meta.latest?'含预估':'',meta?.earliest!==meta?.latest?'日期不齐':''].filter(Boolean).join(' · ');
+    if(flagText){const flag=document.createElement('span');flag.className='date-flag';flag.textContent=flagText;flag.title=dateDetails(meta);head.appendChild(flag);}
+    head.appendChild(iconButton('expand','放大：'+chart.layout?.title?.text,()=>openZoom(chart,meta)));
+    const c=document.createElement('div');c.id='chart_'+generation+'_'+i;c.className='chart-cell';c.style.cssText='width:'+cellW+'px;height:'+(cellH-30)+'px;';
+    card.append(head,c);grid.appendChild(card);return c;
   });
-  return Plotly.relayout(el, {margin: layout.margin, annotations: layout.annotations})
-    .then(() => { el.dataset.layoutReady = '1'; });
-}
-
-function renderChart(cfg) {
-  const wrap = document.getElementById('chartWrap');
-  wrap.innerHTML = '';
-  if (!cfg) return;
-  if (cfg.type === 'data_table') {
-    renderDataTable(wrap, cfg);
-    return;
-  }
-
-  let allCharts = [];
-  if (cfg.charts) {
-    allCharts = cfg.charts.filter(c => c && c.data && c.data.length > 0);
-  } else if (cfg.data) {
-    allCharts = [cfg];
-  }
-  if (allCharts.length === 0) return;
-
-  const contentWrap = document.getElementById('contentWrap');
-  const contentRect = contentWrap.getBoundingClientRect();
-  const contentStyle = getComputedStyle(contentWrap);
-  const cw = Math.floor(contentRect.width - parseFloat(contentStyle.paddingLeft) - parseFloat(contentStyle.paddingRight));
-  const ch = Math.floor(contentRect.height - parseFloat(contentStyle.paddingTop) - parseFloat(contentStyle.paddingBottom));
-  const n = allCharts.length;
-  const hasTable = allCharts.some(c => (c.data || []).some(d => d.type === 'table'));
-  const mobileLayout = window.matchMedia('(max-width: 720px)').matches;
-
-  const cols = mobileLayout ? 1 : (hasTable && n <= 2 ? (cw >= 760 ? 2 : 1) : (cw >= 1040 ? 3 : (cw >= 640 ? 2 : 1)));
-  const visibleRows = cols === 1 ? 2 : (hasTable && n <= 2 && cols === 2 ? 1 : 2);
-  const gap = cw >= 640 ? 12 : 8;
-  const cellH = mobileLayout ? Math.max(260, Math.floor((ch - gap*(visibleRows-1)) / visibleRows)) : Math.floor((ch - gap*(visibleRows-1)) / visibleRows);
-
-  const grid = document.createElement('div');
-  grid.className = 'chart-grid';
-  grid.style.cssText = 'display:grid;grid-template-columns:repeat('+cols+',minmax(0,1fr));gap:'+gap+'px;width:'+cw+'px;max-height:'+ch+'px;padding-right:'+(mobileLayout?4:0)+'px;overflow-y:auto;overflow-x:hidden;';
-
-  for (let i = 0; i < n; i++) {
-    const cell = document.createElement('div');
-    cell.id = 'gc_'+i;
-    cell.className = 'chart-cell';
-    cell.style.height = cellH+'px';
-    grid.appendChild(cell);
-  }
   wrap.appendChild(grid);
-
-  requestAnimationFrame(() => setTimeout(() => {
-    for (let i = 0; i < allCharts.length; i++) {
-      const c = allCharts[i];
-      const el = document.getElementById('gc_'+i);
-      if (!el) continue;
-      const lo = JSON.parse(JSON.stringify(c.layout));
-      const isTable = (c.data || []).some(d => d.type === 'table');
-      const legendNames = (c.data || []).filter(d => d.showlegend !== false && d.name).map(d => d.name);
-      const legendItemCount = legendNames.length;
-      const crowdedLegend = legendItemCount > 6;
-      const plotW = Math.floor(el.getBoundingClientRect().width);
-      const narrowDesktop = !mobileLayout && plotW < 500;
-      lo.width = plotW; lo.height = cellH;
-      lo.margin = lo.margin || {l:35,r:10,t:35,b:105};
-      if (isTable) {
-        lo.margin = {l:0, r:0, t:0, b:0};
-        lo.showlegend = false;
-      } else {
-        if (mobileLayout) {
-          lo.margin = {...lo.margin, t:30, b:crowdedLegend ? 120 : 90};
-          lo.font = {...(lo.font || {}), size:9};
-          if (lo.title && typeof lo.title === 'object') {
-            lo.title.font = {...(lo.title.font || {}), size:12};
-          }
-          Object.keys(lo).filter(k => /^[xy]axis\d*$/.test(k)).forEach(k => {
-            lo[k].tickfont = {...(lo[k].tickfont || {}), size:9};
-          });
-          (lo.annotations || []).forEach(a => {
-            a.font = {...(a.font || {}), size:8};
-          });
-        } else {
-          lo.margin.b = Math.max(lo.margin.b || 0, 130);
-          if (plotW < 500) lo.margin.t = Math.max(lo.margin.t || 0, 44);
-        }
-        const wrappedLegend = !mobileLayout && crowdedLegend;
-        const compactDesktopLegend = narrowDesktop || wrappedLegend;
-        lo.legend = lo.legend || {};
-        lo.legend.font = lo.legend.font || {};
-        if (compactDesktopLegend) {
-          lo.legend.font.size = Math.min(Number(lo.legend.font.size) || 11, 9);
-        }
-        if (mobileLayout) lo.legend.font.size = 9;
-        const legendFontSize = Number(lo.legend.font.size) || 11;
-        const legendWidth = Math.max(80, plotW - (Number(lo.margin.l) || 0) - (Number(lo.margin.r) || 0));
-        const legendRows = estimateLegendRows(legendNames, legendWidth, legendFontSize);
-        const legendTopGap = mobileLayout ? 28 : 42;
-        const legendRowHeight = mobileLayout || compactDesktopLegend ? 18 : 20;
-        const requiredBottom = legendTopGap + legendRows * legendRowHeight + 41;
-        lo.margin.b = Math.max(Number(lo.margin.b) || 0, requiredBottom);
-        const plotH = Math.max(1, cellH - (Number(lo.margin.t) || 0) - (Number(lo.margin.b) || 0));
-        const bottomSourceY = (2 - (Number(lo.margin.b) || 0)) / plotH;
-        (lo.annotations || []).forEach(a => {
-          if (typeof a.text !== 'string' || a.text.indexOf('数据来源') !== 0) return;
-          a.y = bottomSourceY;
-          a.yanchor = 'bottom';
-        });
-        lo.legend.orientation = 'h';
-        lo.legend.y = -legendTopGap / plotH;
-        lo.legend.yanchor = 'top';
-        lo.legend.x = 0.5;
-        lo.legend.xanchor = 'center';
+  renderTimer=setTimeout(()=>{
+    renderTimer=null;
+    if(generation!==renderGeneration){return;}
+    Promise.all(charts.map((c,i)=>{
+    const target=cells[i];
+    if(!target||!target.isConnected||target.parentElement.parentElement!==grid){return;}
+    return drawPlot(c,target,cellW,cellH-30,()=>generation===renderGeneration);
+    })).then(()=>{
+      if(generation!==renderGeneration)return;
+      grid.dataset.ready='true';
+      if(pendingChartIndex?.id===groupId){
+        const card=grid.children[pendingChartIndex.index];
+        if(card){card.classList.add('is-highlighted');card.scrollIntoView({block:'nearest',inline:'nearest'});}
+        pendingChartIndex=null;
       }
-      Plotly.newPlot(el, c.data, lo, {displayModeBar:false, responsive:true})
-        .then(() => centerPlotVertically(el, lo, cellH))
-        .catch(error => {
-          el.dataset.layoutReady = '1';
-          console.error(error);
-        });
-    }
-  }, 80));
+    });
+  },60);
 }
-
-const MODULE_DATA_VERSION = "601b894c547f";
+function drawPlot(chart,target,width,height,isCurrent){
+  const lo=JSON.parse(JSON.stringify(chart.layout||{}));
+  lo.width=width;lo.height=height;
+  const mobile=innerWidth<=720;
+  if(lo.xaxis?.ticktext?.length===12&&lo.xaxis.ticktext.every(text=>/^\d+月$/.test(text))){
+    lo.xaxis.tickangle=0;lo.xaxis.tickfont={...(lo.xaxis.tickfont||{}),size:11};
+  }
+  if(mobile){
+    lo.margin={...(lo.margin||{}),t:34,b:Math.max(84,Number(lo.meta?.mobileBottomMargin)||84)};
+    lo.font={...(lo.font||{}),size:9};
+    if(lo.title&&typeof lo.title==='object')lo.title.font={...(lo.title.font||{}),size:12};
+    ['xaxis','yaxis','yaxis2'].forEach(axis=>{if(lo[axis])lo[axis].tickfont={...(lo[axis].tickfont||{}),size:9};});
+    if(lo.legend)lo.legend.font={...(lo.legend.font||{}),size:9};
+    (lo.annotations||[]).forEach(a=>{a.font={...(a.font||{}),size:8};});
+  }
+  // Long titles wrap inside the plot; the source chart and report title stay intact.
+  if(lo.title?.text&&!lo.title.text.includes('<br>')){
+    const size=lo.title.font?.size||14, limit=Math.max(12,Math.floor((width-28)/size));
+    let line='',weight=0;const lines=[];
+    for(const char of lo.title.text){const step=char.charCodeAt(0)>255?1:.55;if(weight+step>limit){lines.push(line);line='';weight=0;}line+=char;weight+=step;}
+    lines.push(line);lo.title.text=lines.join('<br>');
+    if(lines.length>1)lo.margin={...(lo.margin||{}),t:(lo.margin?.t||48)+(lines.length-1)*(size+3)};
+  }
+  target.dataset.footerReady='false';
+  const fail=error=>{
+    if(!isCurrent()||!target.isConnected)return;
+    if(window.Plotly)Plotly.purge(target);
+    target.classList.add('empty');target.textContent='图表加载失败';target.dataset.footerReady='error';console.error(error);
+  };
+  if(!window.Plotly){fail(new Error('Plotly 未加载'));return Promise.resolve();}
+  try{
+    return Promise.resolve(Plotly.newPlot(target,JSON.parse(JSON.stringify(chart.data)),lo,{displayModeBar:false,responsive:false}))
+      .then(()=>{if(isCurrent()&&target.isConnected)return stackChartFooter(target,lo,height);})
+      .catch(fail);
+  }catch(error){fail(error);return Promise.resolve();}
+}
+function renderZoom(){
+  const body=document.getElementById('zoomBody'),generation=++zoomGeneration;
+  purgeCharts(body);body.replaceChildren();
+  const cell=document.createElement('div');cell.className='chart-cell';body.appendChild(cell);
+  const width=Math.floor(body.clientWidth),height=Math.floor(body.clientHeight);
+  cell.style.cssText='width:'+width+'px;height:'+height+'px;';
+  return drawPlot(zoomChart,cell,width,height,()=>generation===zoomGeneration&&document.getElementById('zoomDialog').open);
+}
+function openZoom(chart,meta){
+  zoomChart=chart;zoomViewport=innerWidth+':'+innerHeight;
+  document.getElementById('zoomDate').textContent=dateLabel(meta);
+  document.getElementById('zoomDate').title=dateDetails(meta);
+  const dialog=document.getElementById('zoomDialog');dialog.setAttribute('aria-label',chart.layout?.title?.text||'放大图表');dialog.showModal();
+  renderZoom();
+}
+function setLayout(value){
+  const id=currentGroups[currentGroup]?.id;if(!id)return;
+  dashboardState.layouts[id]=value;saveState();renderChart(chartData[id]);
+}
+function setupControls(){
+  [['searchOpen','search'],['favoritesOpen','star'],['groupFavorite','star'],['layoutStandard','standard'],['layoutWide','wide'],['searchClose','close'],['zoomClose','close']].forEach(([id,name])=>document.getElementById(id).appendChild(icon(name)));
+  document.getElementById('searchOpen').onclick=()=>openSearch();
+  document.getElementById('favoritesOpen').onclick=()=>openSearch(true);
+  document.getElementById('searchClose').onclick=()=>document.getElementById('searchDialog').close();
+  document.getElementById('zoomClose').onclick=()=>document.getElementById('zoomDialog').close();
+  document.getElementById('zoomDialog').addEventListener('close',()=>{zoomGeneration++;purgeCharts(document.getElementById('zoomBody'));document.getElementById('zoomBody').replaceChildren();if(zoomViewport!==innerWidth+':'+innerHeight&&currentGroups.length)renderChart(chartData[currentGroups[currentGroup].id]);});
+  document.getElementById('chartSearch').oninput=renderSearch;
+  document.getElementById('searchAll').onclick=()=>{searchFavorites=false;renderSearch();};
+  document.getElementById('searchSaved').onclick=()=>{searchFavorites=true;renderSearch();};
+  document.getElementById('searchDialog').addEventListener('keydown',event=>{
+    const results=[...document.querySelectorAll('.result-open')],index=results.indexOf(document.activeElement);
+    if(event.key==='Escape'){event.preventDefault();document.getElementById('searchDialog').close();return;}
+    if(event.key==='ArrowDown'&&results.length){event.preventDefault();results[Math.min(results.length-1,index+1)].focus();}
+    if(event.key==='ArrowUp'){event.preventDefault();if(index>0)results[index-1].focus();else document.getElementById('chartSearch').focus();}
+    if(event.key==='Enter'&&document.activeElement.id==='chartSearch'&&results.length){event.preventDefault();results[0].click();}
+  });
+  document.getElementById('layoutStandard').onclick=()=>setLayout('standard');
+  document.getElementById('layoutWide').onclick=()=>setLayout('wide');
+  const generated=document.getElementById('generatedAt');generated.dateTime=dashboardMeta.generatedAt;generated.textContent='页面生成 '+dashboardMeta.generatedAt.slice(0,16).replace('T',' ');
+  const searchTime=generated.cloneNode(true);searchTime.removeAttribute('id');searchTime.className='search-generated';searchTime.style.cssText='display:block;padding:8px 16px;font-size:10px;color:var(--muted);border-top:1px solid var(--line)';document.getElementById('searchDialog').appendChild(searchTime);
+}
+window.addEventListener('resize',()=>{
+  if(resizeTimer!==null){clearTimeout(resizeTimer);}
+  resizeTimer=setTimeout(()=>{
+    resizeTimer=null;
+    if(document.getElementById('zoomDialog').open){renderZoom();}
+    else if(currentGroups.length){renderChart(chartData[currentGroups[currentGroup].id]);}else{renderChart(null);}
+    revealNavigation();
+  },150);
+});
+setupControls();
+const MODULE_DATA_VERSION = "7c7e0e61b052";
 const moduleDataPromises = new Map();
 let moduleRequestId = 0;
 function showModuleStatus(message){
@@ -527,16 +702,6 @@ selectModule=async function(i,subIndex=0,groupIndex=0){
   }
 };
 buildNav();
-
-let resizeTimer;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    const groups = getGroups(currentModule, currentSub);
-    const group = groups[currentGroupIdx];
-    if (group) renderChart(chartData[group.id]);
-  }, 120);
-});
 </script>
 </body>
 </html>
